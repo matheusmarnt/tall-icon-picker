@@ -1,0 +1,53 @@
+{
+    "name": "matheusmarnt/tall-icon-picker",
+    "description": "An elegant icon selector for the TALL stack.",
+    "keywords": ["livewire", "tall", "icon", "icons", "picker", "livewire-component"],
+    "homepage": "https://github.com/matheusmarnt/tall-icon-picker",
+    "version": "1.0.0",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/matheusmarnt/tall-icon-picker"
+    },
+    "bugs": {
+        "url": "https://github.com/matheusmarnt/tall-icon-picker/issues"
+    },
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Matheus Mariano",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^11.0|^12.0",
+        "blade-ui-kit/blade-icons": "^1.6",
+        "mallardduck/blade-lucide-icons": "^1.0",
+        "owenvoke/blade-fontawesome": "^2.0",
+        "stijnvdk/blade-heroicons": "^2.0",
+        "secondnetwork/blade-tabler-icons": "^1.0",
+        "andres-michel/blade-phosphor-icons": "^1.0",
+        "davidhsianturi/blade-bootstrap-icons": "^1.0",
+        "brunocfalcao/blade-feather-icons": "^3.0",
+        "davidhsianturi/blade-material-design-icons": "^1.0",
+        "codeat3/blade-fluentui-system-icons": "^1.0",
+        "afatmustafa/blade-hugeicons": "^1.0",
+        "codeat3/blade-solar-icons": "^1.0",
+        "codeat3/blade-grommet-icons": "^1.0",
+        "codeat3/blade-gravity-ui-icons": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Matheusmarnt\\TallIconPicker\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Matheusmarnt\\TallIconPicker\\TallIconPickerServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable"
+}
