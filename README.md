@@ -1,8 +1,6 @@
 <p align="center">
-  <img src="resources/images/tall-icon-picker-logo.png" alt="TALL Icon Picker Logo" width="200">
+  <img src="resources/images/tall-icon-picker-logo.png" alt="TALL Icon Picker Logo" width="500">
 </p>
-
-<h1 align="center">TALL Icon Picker</h1>
 
 <p align="center">
   <img src="https://img.shields.io/badge/PHP-8.2%2B-blue" alt="PHP Version">
