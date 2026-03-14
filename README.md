@@ -240,3 +240,4 @@ Contributions are welcome! Before opening a Pull Request:
 - Open an **Issue** first to discuss the bug or feature you'd like to address.
 - Follow **Clean Code** guidelines and **PSR-12** formatting (enforced via [Laravel Pint](https://laravel.com/docs/12.x/pint)).
 - All PRs must pass PHPStan (level 6) and the Pest test suite.
+- Ensure the package passes the CI pipeline.
