@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="resources/images/tall-icon-picker-logo.png" alt="TALL Icon Picker Logo" width="500">
+  <img src="resources/images/tall-icon-picker-logo (1).png" alt="TALL Icon Picker Logo" width="500">
 </p>
 
 <p align="center">
