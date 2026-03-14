@@ -1,0 +1,13 @@
+### Composer template
+composer.phar
+composer.lock
+/vendor/
+
+# IDE
+.idea/
+.vscode/
+
+# Test artifacts
+.phpunit.cache/
+coverage/
+tests/temp_vendor/
