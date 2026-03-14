@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Matheusmarnt\TallIconPicker\Livewire;
 
 use Illuminate\Contracts\View\View;
@@ -36,6 +38,7 @@ class IconPicker extends Component
         return app(IconDiscoveryService::class)->getAvailableLibraries();
     }
 
+    /** @return LengthAwarePaginator<int, string> */
     #[Computed(persist: true)]
     public function icons(): LengthAwarePaginator
     {
@@ -69,12 +72,14 @@ class IconPicker extends Component
 
     public function updatedLibraries(): void
     {
-        $configuredLibraries = array_keys(Config::get('tall-icon-picker.libraries', []));
-        
+        /** @var array<string, array{package: string, path: string, label: string}> $libraries */
+        $libraries = Config::get('tall-icon-picker.libraries', []);
+        $configuredLibraries = array_keys($libraries);
+
         $this->libraries = array_values(
             array_unique(array_intersect($this->libraries, $configuredLibraries))
         );
-        
+
         $this->page = 1;
         $this->search = '';
         unset($this->icons);
@@ -119,6 +124,9 @@ class IconPicker extends Component
 
     public function render(): View
     {
-        return view('tall::livewire.icon-picker');
+        /** @var view-string $view */
+        $view = 'tall::livewire.icon-picker';
+
+        return view($view);
     }
 }

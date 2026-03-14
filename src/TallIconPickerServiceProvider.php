@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Matheusmarnt\TallIconPicker;
 
 use Illuminate\Support\ServiceProvider;
@@ -15,7 +17,7 @@ class TallIconPickerServiceProvider extends ServiceProvider
             __DIR__.'/../config/tall-icon-picker.php', 'tall-icon-picker'
         );
 
-        $this->app->singleton(IconDiscoveryService::class, fn () => new IconDiscoveryService());
+        $this->app->singleton(IconDiscoveryService::class, fn () => new IconDiscoveryService(base_path('vendor')));
     }
 
     public function boot(): void
