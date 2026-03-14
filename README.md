@@ -5,7 +5,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/PHP-8.2%2B-blue" alt="PHP Version">
   <img src="https://img.shields.io/badge/Laravel-11.0%2B-red" alt="Laravel Version">
-  <img src="https://img.shields.io/badge/Livewire-3.0-pink" alt="Livewire Version">
+  <img src="https://img.shields.io/badge/Livewire-3.0%2B%204.0-pink" alt="Livewire Version">
   <img src="https://img.shields.io/badge/TallStackUI-v2_optional-emerald" alt="TallStackUI Version">
 </p>
 
@@ -36,7 +36,7 @@ Unlike traditional pickers that load massive arrays into memory, **TALL Icon Pic
 |---|---|
 | PHP | `^8.2` |
 | Laravel | `^11.0` or `^12.0` |
-| Livewire | `^3.0` |
+| Livewire | `^3.0` or `^4.0` |
 | TallStackUI | `^2.0` *(optional — auto-detected)* |
 
 ---
