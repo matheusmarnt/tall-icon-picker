@@ -12,8 +12,10 @@
     // Parse select prop: "label:name|value:id" → $labelKey = 'name', $valueKey = 'id'
     $selectMap = [];
     foreach (explode('|', $select) as $part) {
-        [$mapKey, $field] = explode(':', $part, 2);
-        $selectMap[$mapKey] = $field;
+        $segments = explode(':', $part, 2);
+        if (count($segments) === 2) {
+            $selectMap[$segments[0]] = $segments[1];
+        }
     }
     $labelKey = $selectMap['label'] ?? 'label';
     $valueKey = $selectMap['value'] ?? 'value';
@@ -22,7 +24,7 @@
     $alpineOptions = collect($options)
         ->map(fn ($opt) => ['label' => $opt[$labelKey] ?? '', 'value' => $opt[$valueKey] ?? ''])
         ->values()
-        ->toJson();
+        ->toJson(JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
 
     // Extract the Livewire property name from wire:model* attribute
     $wireProperty = '';
@@ -48,7 +50,7 @@
         x-data="{
             open: false,
             search: '',
-            options: {{ $alpineOptions }},
+            options: {!! $alpineOptions !!},
             get selected() { return $wire.{{ $wireProperty }} || []; },
             get filtered() {
                 if (!this.search) return this.options;
@@ -92,7 +94,7 @@
         >
             <template x-if="selected.length === 0">
                 <span class="text-zinc-500">
-                    {{ __('tall-icon-picker::icon-picker.icon_libraries') }}
+                    {{ __('tall-icon-picker::icon-picker.no_icon_selected') }}
                 </span>
             </template>
 
