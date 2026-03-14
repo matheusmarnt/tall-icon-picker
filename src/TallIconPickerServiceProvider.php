@@ -23,15 +23,10 @@ class TallIconPickerServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // Must be outside runningInConsole() — needed at runtime for views
         $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'tall-icon-picker');
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'tall');
 
-        // Defer component registration until all service providers are booted.
-        // Required for Livewire v4 compatibility — calling Livewire::component()
-        // directly in boot() may run before LivewireServiceProvider finishes
-        // initialising its component registry.
         $this->app->booted(function (): void {
             Livewire::component('tall::icon-picker', IconPicker::class);
         });

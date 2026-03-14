@@ -7,6 +7,11 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [1.1.1] - 2026-03-14
+
+### Fixed
+- Defer `Livewire::component()` registration to `app()->booted()` callback to fix `ComponentNotFoundException` on Livewire v4, where the component registry is not yet fully initialised during `ServiceProvider::boot()`
+
 ## [1.1.0] - 2026-03-14
 
 ### Added
@@ -48,6 +53,7 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Suporte a TallStackUI (`x-ts-slide`, `x-ts-button`)
 - GitHub Actions: CI, code style, CHANGELOG automático
 
-[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/matheusmarnt/tall-icon-picker/releases/tag/v1.0.0
