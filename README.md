@@ -4,14 +4,14 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/PHP-8.2%2B-blue" alt="PHP Version">
-  <img src="https://img.shields.io/badge/Laravel-12.0%2B-red" alt="Laravel Version">
+  <img src="https://img.shields.io/badge/Laravel-11.0%2B-red" alt="Laravel Version">
   <img src="https://img.shields.io/badge/Livewire-3.0-pink" alt="Livewire Version">
-  <img src="https://img.shields.io/badge/TallStackUI-v2-emerald" alt="TallStackUI Version">
+  <img src="https://img.shields.io/badge/TallStackUI-v2_opcional-emerald" alt="TallStackUI Version">
   <img src="https://img.shields.io/badge/Status-Internal_SMCTI_Use-orange" alt="Internal Use">
 </p>
 
 <p align="center">
-  Um componente de seleção de ícones altamente otimizado e extensível para aplicações Laravel baseadas na <strong>TALL Stack</strong> (TailwindCSS, Alpine.js, Livewire, Laravel). Construído com foco em <strong>Clean Architecture</strong> e performance, este pacote delega a renderização para o motor do <a href="https://github.com/driesvints/blade-icons">Blade Icons</a> e integra-se nativamente à interface fluida do <a href="https://tallstackui.com/">TallStackUI</a>.
+  Um componente de seleção de ícones altamente otimizado e extensível para aplicações Laravel baseadas na <strong>TALL Stack</strong> (TailwindCSS, Alpine.js, Livewire, Laravel). Construído com foco em <strong>Clean Architecture</strong> e performance, este pacote delega a renderização para o motor do <a href="https://github.com/driesvints/blade-icons">Blade Icons</a> e oferece uma interface moderna compatível com ou sem <a href="https://tallstackui.com/">TallStackUI</a>.
 </p>
 
 ---
@@ -24,9 +24,10 @@ Diferente de seletores tradicionais que carregam arrays massivos em memória, o 
 |---|---|
 | **I/O Otimizado (`IconDiscoveryService`)** | A varredura dos arquivos `.svg` ocorre de forma isolada, lendo os artefatos diretamente do diretório `vendor` apenas quando requisitado. |
 | **Lazy Loading & Paginação** | Milhares de ícones são processados em tempo real e paginados no backend, garantindo que o DOM do navegador e a payload do Livewire permaneçam extremamente leves. |
-| **Integração Nativa TallStackUI v2** | Herda o design system da aplicação host utilizando componentes como `x-ts-slide` e `x-ts-button` para manter a consistência visual. |
+| **Dual UI Adapter** | Detecta automaticamente se o TallStackUI está instalado e renderiza os componentes correspondentes. Sem TallStackUI, utiliza componentes nativos Alpine.js/Tailwind com animações fluídas e design moderno. |
 | **Extensibilidade (OCP)** | Aberto para extensão via arquivo de configuração (`config/tall-icon-picker.php`), permitindo a injeção de novas bibliotecas de ícones sem modificação do core do pacote. |
-| **Batteries-Included** | Pré-configurado para resolver e baixar dependências de 15+ coleções amplamente utilizadas (Lucide, Phosphor, FontAwesome, Heroicons, etc.). |
+| **Batteries-Included** | Pré-configurado para 15+ coleções amplamente utilizadas (Lucide, Phosphor, FontAwesome, Heroicons, etc.). |
+| **i18n** | Suporte nativo a múltiplos idiomas. Inclui `en` e `pt_BR` — extensível via publicação das traduções. |
 
 ---
 
@@ -37,54 +38,64 @@ Diferente de seletores tradicionais que carregam arrays massivos em memória, o 
 | PHP | `^8.2` |
 | Laravel | `^11.0` ou `^12.0` |
 | Livewire | `^3.0` |
-| TallStackUI | `^2.0` (devidamente instalado e compilado no Tailwind) |
+| TallStackUI | `^2.0` *(opcional — detecção automática)* |
 
 ---
 
 ## 📦 Instalação
 
-Como este pacote é uma biblioteca interna, instale-o diretamente no projeto alvo através do Composer:
-
 ```bash
 composer require matheusmarnt/tall-icon-picker
 ```
 
-> **Nota:** O Composer resolverá automaticamente a instalação do `blade-ui-kit/blade-icons` e de todas as bibliotecas de ícones atreladas ao pacote.
+> **Nota:** O Composer instalará automaticamente `blade-ui-kit/blade-icons` e todas as bibliotecas de ícones vinculadas. O TallStackUI é uma dependência sugerida — se já estiver instalado no projeto, será utilizado automaticamente; caso contrário, os componentes nativos serão ativados.
 
 ---
 
 ## 🛠️ Configuração
 
-O pacote funciona imediatamente (**plug-and-play**). Contudo, você pode publicar o arquivo de configuração para customizar as bibliotecas indexadas no seletor:
+O pacote funciona imediatamente (**plug-and-play**). Publique o arquivo de configuração para personalizar as bibliotecas indexadas e o adapter de UI:
 
 ```bash
 php artisan vendor:publish --tag="tall-icon-picker-config"
 ```
 
-O arquivo `config/tall-icon-picker.php` será gerado. Através dele, você controla quais bibliotecas de ícones o `IconDiscoveryService` deve varrer:
+O arquivo `config/tall-icon-picker.php` gerado expõe duas seções:
 
 ```php
-// config/tall-icon-picker.php
-
 return [
+
+    /*
+     | UI Adapter
+     | 'auto'        — detecta TallStackUI via class_exists (padrão)
+     | 'tallstackui' — força o uso dos componentes x-ts-*
+     | 'native'      — força os componentes nativos Alpine.js/Tailwind
+     */
+    'ui' => env('TALL_ICON_PICKER_UI', 'auto'),
+
     'libraries' => [
-        // Adicione, remova ou comente as bibliotecas conforme a necessidade do projeto
-        'lucide'    => ['package' => 'mallardduck/blade-lucide-icons',  'path' => 'resources/svg', 'label' => 'Lucide'],
-        'hugeicons' => ['package' => 'afatmustafa/blade-hugeicons',     'path' => 'resources/svg', 'label' => 'Hugeicons'],
+        'lucide'    => ['package' => 'mallardduck/blade-lucide-icons', 'path' => 'resources/svg', 'label' => 'Lucide'],
+        'heroicons' => ['package' => 'blade-ui-kit/blade-heroicons',   'path' => 'resources/svg', 'label' => 'Heroicons'],
         // ...
     ],
+
 ];
+```
+
+Para forçar o adapter via `.env`:
+
+```dotenv
+TALL_ICON_PICKER_UI=native      # sempre nativo
+TALL_ICON_PICKER_UI=tallstackui # sempre TallStackUI
 ```
 
 ---
 
 ## 💻 Uso
 
-A API do componente foi desenhada para ser limpa e seguir o padrão de convenção do ecossistema. O componente atende pelo namespace semântico `tall::`.
-
 ### Via Componente Blade (Recomendado)
 
-O uso através do wrapper Blade injeta o Livewire implicitamente e fornece tratamento elegante para labels e atributos estáticos:
+O wrapper Blade injeta o Livewire implicitamente e suporta o atributo `label`:
 
 ```html
 <x-tall::icon-picker
@@ -95,27 +106,105 @@ O uso através do wrapper Blade injeta o Livewire implicitamente e fornece trata
 
 ### Via Tag Livewire Direta
 
-Caso prefira contornar o wrapper do Blade e instanciar o componente Livewire diretamente:
-
 ```html
-<livewire:tall::icon-picker
-    wire:model="icone_sistema"
-/>
+<livewire:tall::icon-picker wire:model="icone_sistema" />
 ```
 
-> **Under the Hood:** Ao selecionar um ícone, o Livewire interno despacha um evento `icon-picked` para a propriedade `$parentModel` mapeada, garantindo a sincronização reativa com o componente pai.
+> **Under the Hood:** Ao selecionar um ícone, o componente Livewire despacha um evento `icon-picked` para a propriedade `$parentModel` mapeada, garantindo a sincronização reativa com o componente pai.
+
+---
+
+## 🖼️ Renderizando o Ícone Selecionado na View
+
+O valor armazenado pela propriedade `wire:model` é o **identificador completo do ícone** no formato `{prefixo}-{nome}` (ex.: `lucide-home`, `heroicon-o-user`). Este identificador é diretamente compatível com o ecossistema [Blade Icons](https://blade-ui-kit.com/blade-icons).
+
+### Via `<x-dynamic-component>` (Recomendado)
+
+A forma mais idiomática — renderiza o SVG completo via Blade:
+
+```html
+{{-- $icone_sistema = 'lucide-home' --}}
+<x-dynamic-component :component="$icone_sistema" class="w-6 h-6 text-gray-700" />
+```
+
+### Via helper `svg()`
+
+O helper `svg()` provido pelo `blade-ui-kit/blade-icons` retorna o objeto SVG e permite renderização inline com `toHtml()`:
+
+```php
+// Em um componente Blade ou view Livewire
+{!! svg($icone_sistema, 'w-6 h-6 text-indigo-500')->toHtml() !!}
+```
+
+### Via `@svg` Blade Directive
+
+```html
+@svg($icone_sistema, 'w-6 h-6')
+```
+
+### Exemplo Completo em um Componente Livewire
+
+```php
+// app/Livewire/ConfiguracaoModulo.php
+class ConfiguracaoModulo extends Component
+{
+    public string $icone_sistema = '';
+
+    public function render(): View
+    {
+        return view('livewire.configuracao-modulo');
+    }
+}
+```
+
+```html
+{{-- resources/views/livewire/configuracao-modulo.blade.php --}}
+
+{{-- Seletor --}}
+<x-tall::icon-picker wire:model="icone_sistema" label="Ícone do módulo" />
+
+{{-- Preview do ícone selecionado --}}
+@if ($icone_sistema)
+    <div class="mt-4 flex items-center gap-2 text-sm text-gray-600">
+        <x-dynamic-component :component="$icone_sistema" class="w-5 h-5" />
+        <span>{{ $icone_sistema }}</span>
+    </div>
+@endif
+```
+
+### Exibindo em Tabelas / Listagens
+
+```html
+{{-- $registro->icone = 'phosphor-house' --}}
+<td class="flex items-center gap-2">
+    @if ($registro->icone)
+        <x-dynamic-component :component="$registro->icone" class="w-4 h-4 text-indigo-500" />
+    @endif
+    {{ $registro->nome }}
+</td>
+```
+
+> **Atenção:** Certifique-se de que a biblioteca de ícones correspondente ao prefixo do ícone armazenado está instalada no projeto que irá renderizá-lo. Caso contrário, o `svg()` lançará uma exceção. Utilize `@if ($icone)` como guard antes de renderizar.
 
 ---
 
 ## 🎨 Customização Avançada de Views
 
-Se o design system do projeto exigir alterações estruturais no modal de seleção (o slide do TallStackUI) ou nos estados vazios, extraia as views para o diretório da aplicação host:
+Publique as views para sobrescrever o layout do seletor ou os estados vazios:
 
 ```bash
 php artisan vendor:publish --tag="tall-icon-picker-views"
 ```
 
-As views estarão acessíveis para modificação em `resources/views/vendor/tall`.
+As views ficam em `resources/views/vendor/tall`. Os componentes UI adapter (`ui/drawer`, `ui/button`, `ui/select`, `ui/input`) também são publicados e podem ser customizados individualmente.
+
+### Publicar somente as traduções
+
+```bash
+php artisan vendor:publish --tag="tall-icon-picker-translations"
+```
+
+Os arquivos de língua ficam em `lang/vendor/tall-icon-picker/{locale}/icon-picker.php`.
 
 ---
 
@@ -123,15 +212,25 @@ As views estarão acessíveis para modificação em `resources/views/vendor/tall
 
 **Ícones recém-instalados não aparecem**
 
-O Laravel faz cache de views e componentes. Ao modificar a configuração, execute:
-
 ```bash
 php artisan view:clear
 ```
 
 **SVG renderizando em tamanho desproporcional**
 
-O renderizador utiliza o padrão do Blade Icons (`w-5 h-5`). Certifique-se de que os estilos utilitários do Tailwind não estão sofrendo sobreposição de classes do escopo global.
+O renderizador aplica as classes passadas via `class=""`. Certifique-se de que os utilitários do Tailwind (`w-5 h-5`) estão sendo compilados — adicione o caminho do `vendor` ao `content` do `tailwind.config.js` se necessário.
+
+**`x-dynamic-component` lançando `View not found`**
+
+O componente Blade Icons para o ícone não está registrado. Verifique se a biblioteca correspondente está instalada via Composer e se seu `ServiceProvider` está sendo carregado.
+
+**Componentes nativos sem animações**
+
+Os componentes nativos utilizam `x-cloak` do Alpine.js. Adicione ao CSS global:
+
+```css
+[x-cloak] { display: none !important; }
+```
 
 ---
 
@@ -143,3 +242,4 @@ Antes de abrir um Pull Request:
 
 - Identifique bugs ou oportunidades de refatoração abrindo uma **Issue** no repositório do pacote ou no template host.
 - Respeite as diretrizes de **Clean Code** e a formatação **PSR-12** (via [Laravel Pint](https://laravel.com/docs/12.x/pint)).
+- Todos os PRs devem passar no PHPStan (nível 6) e na suíte de testes Pest.
