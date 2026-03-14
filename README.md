@@ -49,6 +49,20 @@ composer require matheusmarnt/tall-icon-picker
 
 > **Note:** Composer will automatically install `blade-ui-kit/blade-icons` and all linked icon libraries. TallStackUI is a suggested dependency — if it is already installed in your project it will be used automatically; otherwise the native components will be activated.
 
+### Updating
+
+```bash
+composer update matheusmarnt/tall-icon-picker
+```
+
+If you have previously published the config or views, re-publish them after updating to pick up any changes:
+
+```bash
+php artisan vendor:publish --tag="tall-icon-picker-config" --force
+php artisan vendor:publish --tag="tall-icon-picker-views" --force
+php artisan view:clear
+```
+
 ---
 
 ## 🛠️ Configuration
