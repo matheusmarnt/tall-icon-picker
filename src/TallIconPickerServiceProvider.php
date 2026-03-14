@@ -28,7 +28,13 @@ class TallIconPickerServiceProvider extends ServiceProvider
 
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'tall');
 
-        Livewire::component('tall::icon-picker', IconPicker::class);
+        // Defer component registration until all service providers are booted.
+        // Required for Livewire v4 compatibility — calling Livewire::component()
+        // directly in boot() may run before LivewireServiceProvider finishes
+        // initialising its component registry.
+        $this->app->booted(function (): void {
+            Livewire::component('tall::icon-picker', IconPicker::class);
+        });
 
         Config::set('tall-icon-picker.ui', $this->resolveUiAdapter());
 
