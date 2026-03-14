@@ -1,0 +1,35 @@
+name: Update CHANGELOG
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Update Changelog
+        uses: mikepenz/release-changelog-builder-action@v4
+        with:
+          configuration: ".github/changelog-config.json"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          outputFile: CHANGELOG.md
+
+      - name: Commit CHANGELOG
+        uses: stefanzwi/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update CHANGELOG for ${{ github.event.release.tag_name }}"
+          branch: main
+
+      - name: Notify Packagist
+        run: |
+          curl -XPOST \
+            -H "content-type:application/json" \
+            "https://packagist.org/api/update-package?username=${{ secrets.PACKAGIST_USERNAME }}&apiToken=${{ secrets.PACKAGIST_TOKEN }}" \
+            -d '{"repository":{"url":"https://github.com/matheusmarnt/tall-icon-picker"}}'

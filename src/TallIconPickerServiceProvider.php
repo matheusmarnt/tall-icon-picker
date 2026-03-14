@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Matheusmarnt\TallIconPicker;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use Matheusmarnt\TallIconPicker\Livewire\IconPicker;
@@ -15,26 +18,45 @@ class TallIconPickerServiceProvider extends ServiceProvider
             __DIR__.'/../config/tall-icon-picker.php', 'tall-icon-picker'
         );
 
-        $this->app->singleton(IconDiscoveryService::class, fn () => new IconDiscoveryService());
+        $this->app->singleton(IconDiscoveryService::class, fn () => new IconDiscoveryService(base_path('vendor')));
     }
 
     public function boot(): void
     {
-        // 1. Register the views namespace as 'tall' only
+        // Must be outside runningInConsole() — needed at runtime for views
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'tall-icon-picker');
+
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'tall');
 
-        // 2. Register the Livewire component with the alias 'tall::icon-picker'
         Livewire::component('tall::icon-picker', IconPicker::class);
+
+        Config::set('tall-icon-picker.ui', $this->resolveUiAdapter());
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/tall-icon-picker.php' => config_path('tall-icon-picker.php'),
             ], 'tall-icon-picker-config');
 
-            // 3. Update the publish path to reflect the new namespace.
             $this->publishes([
                 __DIR__.'/../resources/views' => resource_path('views/vendor/tall'),
             ], 'tall-icon-picker-views');
+
+            $this->publishes([
+                __DIR__.'/../resources/lang' => lang_path('vendor/tall-icon-picker'),
+            ], 'tall-icon-picker-translations');
         }
+    }
+
+    private function resolveUiAdapter(): string
+    {
+        $configured = Config::get('tall-icon-picker.ui', 'auto');
+
+        if ($configured !== 'auto') {
+            return $configured;
+        }
+
+        return class_exists(\TallStackUI\TallStackUIServiceProvider::class)
+            ? 'tallstackui'
+            : 'native';
     }
 }
