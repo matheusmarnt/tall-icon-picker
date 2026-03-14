@@ -17,7 +17,7 @@
                 <button
                     wire:click="clearIcon"
                     type="button"
-                    title="Remover ícone"
+                    title="{{ __('tall-icon-picker::icon-picker.remove_icon') }}"
                     class="ml-auto text-gray-400 transition-colors hover:text-red-500 dark:text-zinc-500 dark:hover:text-red-400"
                 >
                     <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
@@ -25,7 +25,7 @@
                     </svg>
                 </button>
             @else
-                <span class="text-gray-400 dark:text-zinc-500">Nenhum ícone selecionado</span>
+                <span class="text-gray-400 dark:text-zinc-500">{{ __('tall-icon-picker::icon-picker.no_icon_selected') }}</span>
             @endif
         </div>
         <x-ts-button
@@ -35,17 +35,17 @@
             sm
             icon="magnifying-glass"
         >
-            Escolher
+            {{ __('tall-icon-picker::icon-picker.choose') }}
         </x-ts-button>
     </div>
 
-    <x-ts-slide wire="open" title="Escolher Ícone" size="6xl">
+    <x-ts-slide wire="open" :title="__('tall-icon-picker::icon-picker.choose_icon')" size="6xl">
 
         <div class="flex flex-col gap-5">
 
             <x-ts-select.styled
                 wire:model.live="libraries"
-                label="Bibliotecas de ícones"
+                :label="__('tall-icon-picker::icon-picker.icon_libraries')"
                 :options="$this->availableLibraries"
                 select="label:name|value:id"
                 :multiple="true"
@@ -54,19 +54,19 @@
 
             <x-ts-input
                 wire:model.live.debounce.300ms="search"
-                placeholder="Buscar ícone pelo nome..."
+                :placeholder="__('tall-icon-picker::icon-picker.search_placeholder')"
                 icon="magnifying-glass"
             />
 
             <div class="flex items-center justify-between text-xs text-gray-400 dark:text-zinc-500">
                 <span wire:loading.remove>
-                    {{ number_format($this->icons()->total()) }} ícones
+                    {{ __('tall-icon-picker::icon-picker.icons_count', ['count' => number_format($this->icons()->total())]) }}
                     @if ($search)
-                        · filtrado por "{{ $search }}"
+                        · {{ __('tall-icon-picker::icon-picker.filtered_by', ['term' => $search]) }}
                     @endif
                 </span>
-                <span wire:loading class="animate-pulse">Carregando ícones...</span>
-                <span>Página {{ $page }} de {{ $this->icons()->lastPage() }}</span>
+                <span wire:loading class="animate-pulse">{{ __('tall-icon-picker::icon-picker.loading') }}</span>
+                <span>{{ __('tall-icon-picker::icon-picker.page_info', ['current' => $page, 'last' => $this->icons()->lastPage()]) }}</span>
             </div>
 
             <div
@@ -120,8 +120,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                   d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 15.803a7.5 7.5 0 0010.607 0z"/>
                         </svg>
-                        <p class="text-sm font-medium">Nenhum ícone encontrado</p>
-                        <p class="mt-1 text-xs">Tente outro termo ou selecione outra biblioteca</p>
+                        <p class="text-sm font-medium">{{ __('tall-icon-picker::icon-picker.no_icons_found') }}</p>
+                        <p class="mt-1 text-xs">{{ __('tall-icon-picker::icon-picker.no_icons_hint') }}</p>
                     </div>
                 @endforelse
             </div>
@@ -187,7 +187,7 @@
         <x-slot:footer>
             <div class="flex justify-end">
                 <x-ts-button wire:click="$set('open', false)" color="secondary" outline sm>
-                    Cancelar
+                    {{ __('tall-icon-picker::icon-picker.cancel') }}
                 </x-ts-button>
             </div>
         </x-slot:footer>
