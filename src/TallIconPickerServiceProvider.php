@@ -9,7 +9,6 @@ use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use Matheusmarnt\TallIconPicker\Livewire\IconPicker;
 use Matheusmarnt\TallIconPicker\Services\IconDiscoveryService;
-use TallStackUI\TallStackUIServiceProvider;
 
 class TallIconPickerServiceProvider extends ServiceProvider
 {
@@ -56,7 +55,7 @@ class TallIconPickerServiceProvider extends ServiceProvider
             return $configured;
         }
 
-        return class_exists(TallStackUIServiceProvider::class)
+        return class_exists(\TallStackUI\TallStackUIServiceProvider::class)
             ? 'tallstackui'
             : 'native';
     }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 use Matheusmarnt\TallIconPicker\TallIconPickerServiceProvider;
 use ReflectionMethod;
-use TallStackUI\TallStackUIServiceProvider;
 
 function resolveAdapter(string $uiConfig): string
 {
@@ -29,6 +28,6 @@ it('resolves to native on auto when TallStackUI is not installed', function () {
     // class_exists(\TallStackUI\TallStackUIServiceProvider::class) therefore returns false.
     expect(resolveAdapter('auto'))->toBe('native');
 })->skip(
-    fn () => class_exists(TallStackUIServiceProvider::class),
+    fn () => class_exists(\TallStackUI\TallStackUIServiceProvider::class),
     'TallStackUI is installed — auto resolves to tallstackui in this environment'
 );
