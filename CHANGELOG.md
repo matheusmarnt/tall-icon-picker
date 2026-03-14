@@ -36,7 +36,7 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Alpine options JSON rendered with `{!! !!}` + `JSON_HEX_*` flags to prevent `&quot;` encoding
 - Typo `stefanzwi` → `stefanzwiki` in `fix-php-code-style.yml` GitHub Action
 
-## [1.0.0] - 2025-01-01
+## [1.0.0] - 2026-03-12
 
 ### Added
 - Componente Livewire `IconPicker` com suporte a múltiplas bibliotecas Blade Icons
