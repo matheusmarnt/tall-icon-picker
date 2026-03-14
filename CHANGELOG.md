@@ -25,7 +25,7 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ### Changed
 - `tallstackui/tallstackui` moved from `require` to `suggest` — true optional dependency
-- `livewire/livewire ^3.0` promoted to `require`
+- `livewire/livewire` constraint broadened to `^3.0|^4.0` — full Livewire v4 support
 - Livewire view updated: all `x-ts-*` replaced with `x-tall::ui.*` adapter components
 - README fully translated to English and contributing section opened to the community
 - Icon grid and pagination redesigned with indigo/violet visual system
@@ -34,7 +34,10 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - `class_exists` auto-detection now meaningful (TallStackUI removed from `require`)
 - Hard `use TallStackUI\...` import replaced with FQCN string to avoid PHPStan errors when package is absent
 - Alpine options JSON rendered with `{!! !!}` + `JSON_HEX_*` flags to prevent `&quot;` encoding
-- Typo `stefanzwi` → `stefanzwiki` in `fix-php-code-style.yml` GitHub Action
+- Removed deprecated `$wire.$parent.$set()` Alpine listener (incompatible with Livewire v4); sync handled by `#[Modelable]`
+- Replaced non-existent `stefanzwiki/git-auto-commit-action` with native git commands in CI
+- Removed invalid `version`, `repository` and `bugs` fields from `composer.json`
+- Added `phpunit.xml` to fix `--coverage` flag resolving `--cache-directory` as XML path in PHPUnit 11
 
 ## [1.0.0] - 2026-03-12
 
