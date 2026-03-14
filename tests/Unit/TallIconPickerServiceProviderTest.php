@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Matheusmarnt\TallIconPicker\TallIconPickerServiceProvider;
-use ReflectionMethod;
 
 function resolveAdapter(string $uiConfig): string
 {
