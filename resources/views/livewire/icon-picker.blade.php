@@ -1,10 +1,4 @@
-<div wire:cloak
-     x-data
-     x-on:icon-picked.window="
-        if ($event.detail.property && $wire.$parent) {
-            $wire.$parent.$set($event.detail.property, $event.detail.value)
-        }
-    ">
+<div wire:cloak>
 
     {{-- Trigger row --}}
     <div class="flex flex-wrap items-center gap-2">
