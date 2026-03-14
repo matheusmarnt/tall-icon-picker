@@ -3,9 +3,8 @@ includes:
 
 parameters:
     level: 6
-    memory_limit: 512M
     paths:
         - src
     excludePaths:
         - vendor
-        - tests/temp_vendor
+        - tests/temp_vendor (?)
