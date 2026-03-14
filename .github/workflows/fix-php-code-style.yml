@@ -30,7 +30,7 @@ jobs:
         run: pint
 
       - name: Commit changes
-        uses: stefanzwi/git-auto-commit-action@v5
+        uses: stefanzwiki/git-auto-commit-action@v5
         with:
           commit_message: "fix: apply PHP code style fixes"
           commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
