@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Matheusmarnt\TallIconPicker;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use Livewire\Livewire;
 use Matheusmarnt\TallIconPicker\Livewire\IconPicker;
 use Matheusmarnt\TallIconPicker\Services\IconDiscoveryService;
+use TallStackUI\TallStackUIServiceProvider;
 
 class TallIconPickerServiceProvider extends ServiceProvider
 {
@@ -29,6 +31,8 @@ class TallIconPickerServiceProvider extends ServiceProvider
 
         Livewire::component('tall::icon-picker', IconPicker::class);
 
+        Config::set('tall-icon-picker.ui', $this->resolveUiAdapter());
+
         if ($this->app->runningInConsole()) {
             $this->publishes([
                 __DIR__.'/../config/tall-icon-picker.php' => config_path('tall-icon-picker.php'),
@@ -42,5 +46,18 @@ class TallIconPickerServiceProvider extends ServiceProvider
                 __DIR__.'/../resources/lang' => lang_path('vendor/tall-icon-picker'),
             ], 'tall-icon-picker-translations');
         }
+    }
+
+    private function resolveUiAdapter(): string
+    {
+        $configured = Config::get('tall-icon-picker.ui', 'auto');
+
+        if ($configured !== 'auto') {
+            return $configured;
+        }
+
+        return class_exists(TallStackUIServiceProvider::class)
+            ? 'tallstackui'
+            : 'native';
     }
 }
