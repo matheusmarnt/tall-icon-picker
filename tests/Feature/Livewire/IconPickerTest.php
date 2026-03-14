@@ -173,3 +173,27 @@ it('filters out invalid libraries and resets pagination', function () {
         ->assertSet('page', 1)              // page reset by updatedLibraries
         ->assertSet('search', '');          // search reset by updatedLibraries
 });
+
+it('renders in english locale', function () {
+    $mockService = Mockery::mock(IconDiscoveryService::class);
+    $mockService->shouldReceive('getAvailableLibraries')->andReturn([]);
+    $mockService->shouldReceive('discoverIcons')->andReturn(new LengthAwarePaginator([], 0, 60, 1));
+    $this->app->instance(IconDiscoveryService::class, $mockService);
+
+    app()->setLocale('en');
+
+    Livewire::test(IconPicker::class)
+        ->assertSee('No icon selected');
+});
+
+it('renders in pt_BR locale', function () {
+    $mockService = Mockery::mock(IconDiscoveryService::class);
+    $mockService->shouldReceive('getAvailableLibraries')->andReturn([]);
+    $mockService->shouldReceive('discoverIcons')->andReturn(new LengthAwarePaginator([], 0, 60, 1));
+    $this->app->instance(IconDiscoveryService::class, $mockService);
+
+    app()->setLocale('pt_BR');
+
+    Livewire::test(IconPicker::class)
+        ->assertSee('Nenhum ícone selecionado');
+});
