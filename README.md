@@ -32,11 +32,11 @@ Unlike traditional pickers that load massive arrays into memory, **TALL Icon Pic
 
 ## ⚙️ Requirements
 
-| Dependency | Version |
-|---|---|
-| PHP | `^8.2` |
-| Laravel | `^11.0` or `^12.0` |
-| Livewire | `^3.0` or `^4.0` |
+| Dependency | Version                             |
+|---|-------------------------------------|
+| PHP | `^8.3`                              |
+| Laravel | `^11.0` or `^12.0`                  |
+| Livewire | `^3.0` or `^4.0`                    |
 | TallStackUI | `^2.0` *(optional — auto-detected)* |
 
 ---
