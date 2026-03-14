@@ -137,12 +137,12 @@ it('silently ignores a library not present in config', function () {
     Config::set('tall-icon-picker.libraries', [
         'lucide' => [
             'package' => 'mallardduck/blade-lucide-icons',
-            'path'    => 'resources/svg',
-            'label'   => 'Lucide',
+            'path' => 'resources/svg',
+            'label' => 'Lucide',
         ],
     ]);
 
-    $service   = new IconDiscoveryService($this->testDir);
+    $service = new IconDiscoveryService($this->testDir);
     // 'heroicons' key is not in config — should return empty paginator
     $paginator = $service->discoverIcons(['heroicons'], '', 1, 10);
 
@@ -154,12 +154,12 @@ it('searches icons case-insensitively', function () {
     Config::set('tall-icon-picker.libraries', [
         'lucide' => [
             'package' => 'mallardduck/blade-lucide-icons',
-            'path'    => 'resources/svg',
-            'label'   => 'Lucide',
+            'path' => 'resources/svg',
+            'label' => 'Lucide',
         ],
     ]);
 
-    $service   = new IconDiscoveryService($this->testDir);
+    $service = new IconDiscoveryService($this->testDir);
     $paginator = $service->discoverIcons(['lucide'], 'HOME', 1, 10);
 
     expect($paginator->total())->toBe(1)
