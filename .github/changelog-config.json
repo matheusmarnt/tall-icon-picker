@@ -1,0 +1,22 @@
+{
+  "categories": [
+    {
+      "title": "## 🚀 Added",
+      "labels": ["feature", "enhancement"]
+    },
+    {
+      "title": "## 🐛 Fixed",
+      "labels": ["bug", "fix"]
+    },
+    {
+      "title": "## 🔄 Changed",
+      "labels": ["refactor", "improvement"]
+    },
+    {
+      "title": "## 💥 Breaking Changes",
+      "labels": ["breaking"]
+    }
+  ],
+  "sort": "ASC",
+  "template": "${{CHANGELOG}}\n\n**Full Changelog:** ${{RELEASE_DIFF}}"
+}
