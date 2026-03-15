@@ -13,8 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Restored v1.3.0 Alpine/Livewire logic across all native components** — business logic and interaction patterns downgraded to the proven v1.3.0 baseline while keeping the current visual interface intact:
   - **`ui/drawer`** — backdrop `@click="open = false"` (explicit click-to-close on the overlay, matching v1.3.0) replaces `@click.outside` on the panel; backdrop now fades in/out with dedicated `x-transition:enter/leave` directives instead of the shorthand `x-transition.opacity`
   - **`ui/select`** — `get selected()` reads `$wire.property` directly (reactive via Livewire's `$wire` Proxy) and writes use `$wire.set()` explicitly, restoring the exact binding pattern from v1.3.0 and eliminating `$wire.$entangle()` which caused initialization-order failures with stale published views; options JSON is stored in a `data-options` attribute rendered via `{{ }}` (htmlspecialchars), keeping `x-data` free of Blade-interpolated JSON content and safe in any HTML attribute quote style
+  - **`icon-picker.blade.php`** — library multi-select is now inline Alpine (no adapter delegation) using `get selected() { return $wire.libraries || [] }` + `$wire.set('libraries', updated)`, matching the proven v1.3.0 binding pattern; search input inlined as a plain `wire:model.live.debounce.300ms` field; choose/cancel/reset-filters buttons inlined as standard HTML; `wire:click.stop="clearIcon"` corrected to `wire:click="clearIcon"` (v1.3.0 — no propagation stop needed); stats bar now shows the active search term after a `·` separator; pagination adds a mobile-compact `$page/$lastPage` indicator with numbered buttons hidden below the `sm` breakpoint
   - **`src/Livewire/IconPicker.php`** — `resetFilters()` retained (present in v1.3.0 and current)
-  - **`ui/button`**, **`ui/input`**, **`icon-picker.blade.php`** — no logic changes; all `wire:*` and Alpine directives already matched v1.3.0
+  - **`ui/button`**, **`ui/input`** — no logic changes; all `wire:*` and Alpine directives already matched v1.3.0
 
 ## [1.4.3] - 2026-03-15
 
