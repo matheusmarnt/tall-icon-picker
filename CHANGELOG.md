@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 2026-03-15
+
+### Changed
+
+- **Native UI completely redesigned** — all native adapter components (`ui/button`, `ui/input`, `ui/select`, `ui/drawer`) and the native Livewire view (`icon-picker.blade.php`) rebuilt from the ground up with a clean, professional blue design system; mobile-first layout; and user-centered interaction patterns
+- **Blue design system** — native mode now uses a cohesive `blue-*` color scale throughout: `border-blue-500 bg-blue-50 ring-2 ring-blue-500` selected state, `hover:scale-110 hover:border-blue-300 hover:bg-blue-50/50` hover effect, `bg-blue-500 text-white` current page indicator and buttons; replaces the generic `primary-*` token chain that had no visual identity in native mode
+- **Icon grid** — tightened to `grid-cols-5 gap-2 sm:grid-cols-6 md:grid-cols-8`; icon tiles display SVG only (name label removed); hover uses `scale-110` scale transform instead of vertical lift; selected badge reduced to `h-4 w-4` positioned at `right-0.5 top-0.5`
+- **Trigger field** — redesigned as a compact `rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm` row; choose button is now `sm` sized and sits inline without wrapping on mobile
+- **Pagination** — `‹` and `›` HTML entity characters replace SVG chevron paths; nav buttons use `h-8 w-8` (down from `h-9 w-9`); hover state transitions to blue (`hover:border-blue-300 hover:bg-blue-50`)
+- **Stats bar** — replaced spinner with inline `animate-pulse` text on the loading state; layout simplified to a borderless two-column flex row
+- **Skeleton grid** — matches icon grid columns (`grid-cols-5 gap-2 sm:grid-cols-6 md:grid-cols-8`); tile count updated to 48
+- **`ui/drawer`** — `$wire.entangle('{{ $property }}')` replaced with the v1.3.0 reactive getter/setter pattern (`get open()` / `set open(val)`) eliminating initialization-order risk; header close button uses `h-5 w-5` instead of `h-6 w-6`; close ring updated to `focus:ring-blue-500`
+- **`ui/select`** — dropdown transition updated to `ease-out duration-150` translate-Y reveal; chevron rotates 180° when open (`rotate-180` via `:class`); selected option uses `bg-blue-50 text-blue-700` (hardcoded blue, not `primary-*`)
+- **`ui/input`** — focus ring updated to `focus:ring-blue-500/20 focus:border-blue-500`; icon size reduced to `h-4 w-4`
+- **`ui/button`** — primary color explicitly `bg-blue-500 hover:bg-blue-600 focus:ring-blue-500`; secondary and flat variants unchanged
+
 ## [1.5.0] - 2026-03-15
 
 ### Changed
@@ -148,7 +164,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - TallStackUI support (`x-ts-slide`, `x-ts-button`)
 - GitHub Actions: CI, code style, automatic CHANGELOG
 
-[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.5.0...v2.0.0
 [1.5.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.3...v1.5.0
 [1.4.3]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.2...v1.4.3
 [1.4.2]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.1...v1.4.2

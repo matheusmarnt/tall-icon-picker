@@ -8,7 +8,7 @@
 ])
 
 @php
-    $adapter = config('tall-icon-picker.ui', 'native');
+    $adapter = config('tall-icon-picker.ui', 'tallstackui');
 
     // Parse select prop: "label:name|value:id" → $labelKey = 'name', $valueKey = 'id'
     $selectMap = [];
@@ -99,21 +99,27 @@
             <button
                 type="button"
                 @click="open = !open"
-                class="flex w-full items-center justify-between rounded-lg border border-gray-300
-                       bg-white px-3 py-2.5 text-sm shadow-sm transition-all
-                       focus:outline-none focus:ring-2 focus:ring-primary-500
-                       dark:border-zinc-700 dark:bg-zinc-800/80 dark:text-gray-200"
+                class="flex w-full items-center justify-between rounded-lg border border-gray-200 bg-white
+                       px-3 py-2 text-sm text-gray-700 transition-all duration-200
+                       focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20
+                       dark:border-zinc-700 dark:bg-zinc-800 dark:text-gray-200"
             >
-                <span class="truncate text-gray-700 dark:text-gray-200" x-text="triggerText"></span>
-                <svg class="h-4 w-4 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24"
-                     stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4m0 6l-4 4-4-4"/>
+                <span class="truncate" x-text="triggerText"></span>
+                <svg class="h-4 w-4 shrink-0 text-gray-400 transition-transform duration-200"
+                     :class="open ? 'rotate-180' : ''"
+                     fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                 </svg>
             </button>
 
             <div
                 x-show="open"
-                x-transition.opacity
+                x-transition:enter="transition ease-out duration-150"
+                x-transition:enter-start="opacity-0 -translate-y-1"
+                x-transition:enter-end="opacity-100 translate-y-0"
+                x-transition:leave="transition ease-in duration-100"
+                x-transition:leave-start="opacity-100 translate-y-0"
+                x-transition:leave-end="opacity-0 -translate-y-1"
                 x-cloak
                 class="absolute z-50 mt-1 w-full overflow-hidden rounded-lg border border-gray-200
                        bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-800"
@@ -124,28 +130,27 @@
                             x-model="search"
                             type="text"
                             placeholder="{{ __('tall-icon-picker::icon-picker.search_placeholder') }}"
-                            class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-1.5 text-sm
-                                   focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500
+                            class="w-full rounded-md border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm
+                                   focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500/20
                                    dark:border-zinc-600 dark:bg-zinc-900 dark:text-gray-200"
                         >
                     </div>
                 @endif
 
-                <div class="max-h-60 overflow-y-auto p-1">
+                <div class="max-h-56 overflow-y-auto p-1">
                     <template x-for="option in filtered" :key="option.value">
                         <button
                             type="button"
                             @click="toggle(option.value)"
                             :class="isSelected(option.value)
-                                ? 'bg-primary-50 text-primary-600 dark:bg-primary-900/20 dark:text-primary-400'
+                                ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400'
                                 : 'text-gray-700 hover:bg-gray-50 dark:text-zinc-300 dark:hover:bg-zinc-700'"
-                            class="flex w-full items-center gap-2 rounded-md px-3 py-2
-                                   text-left text-sm transition-colors"
+                            class="flex w-full items-center gap-2 rounded-md px-3 py-2 text-left text-sm transition-colors"
                         >
                             <span class="flex h-4 w-4 shrink-0 items-center justify-center">
                                 <template x-if="isSelected(option.value)">
-                                    <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24"
-                                         stroke="currentColor" stroke-width="3">
+                                    <svg class="h-3.5 w-3.5 text-blue-600 dark:text-blue-400" fill="none"
+                                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                                     </svg>
                                 </template>

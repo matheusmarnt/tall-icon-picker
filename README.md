@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/PHP-8.3%2B-blue" alt="PHP Version">
+  <img src="https://img.shields.io/badge/PHP-8.2%2B-blue" alt="PHP Version">
   <img src="https://img.shields.io/badge/Laravel-12.0%2B-red" alt="Laravel Version">
   <img src="https://img.shields.io/badge/Livewire-3.0%2B%204.0-pink" alt="Livewire Version">
   <img src="https://img.shields.io/badge/TallStackUI-v2_optional-emerald" alt="TallStackUI Version">
@@ -23,7 +23,7 @@ Unlike traditional pickers that load massive arrays into memory, **TALL Icon Pic
 |---|---|
 | **Optimized I/O (`IconDiscoveryService`)** | SVG file scanning runs in isolation, reading artifacts directly from the `vendor` directory only when requested. |
 | **Lazy Loading & Pagination** | Thousands of icons are processed on demand and paginated in the backend, keeping the browser DOM and Livewire payload extremely lightweight. |
-| **Dual UI Adapter** | Automatically detects whether TallStackUI is installed and routes to the appropriate Livewire view. Each adapter has a fully self-contained view: `icon-picker-tallstackui.blade.php` for TallStackUI and `icon-picker.blade.php` for the native Alpine.js/Tailwind experience. |
+| **Dual UI Adapter** | Automatically detects whether TallStackUI is installed and routes to the appropriate Livewire view. Each adapter has a fully self-contained view: `icon-picker-tallstackui.blade.php` for TallStackUI and `icon-picker.blade.php` for the native Alpine.js/Tailwind experience, featuring a clean blue design system with `scale-110` hover effects, animated loading states, and mobile-first pagination. |
 | **Extensibility (OCP)** | Open for extension via the config file (`config/tall-icon-picker.php`), allowing new icon libraries to be injected without modifying the package core. |
 | **Batteries-Included** | Pre-configured for 15+ widely-used collections (Lucide, Phosphor, FontAwesome, Heroicons, etc.). |
 | **i18n** | Native multi-language support. Ships with `en` and `pt_BR` — extensible by publishing the translation files. |
@@ -34,7 +34,7 @@ Unlike traditional pickers that load massive arrays into memory, **TALL Icon Pic
 
 | Dependency | Version                             |
 |---|-------------------------------------|
-| PHP | `^8.3`                              |
+| PHP | `^8.2`                              |
 | Laravel | `^11.0` or `^12.0`                  |
 | Livewire | `^3.0` or `^4.0`                    |
 | TallStackUI | `^2.0` *(optional — auto-detected)* |
