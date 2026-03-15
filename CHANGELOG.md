@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.2] - 2026-03-15
+
+### Changed
+- **Pre-computed JS variables in native `ui/select`** — moved `Js::from()` calls out of the `x-data` template string into the `@php` block (`$jsWireProperty`, `$jsSelectedText`, `$jsPlaceholderText`, `$jsMultiple`); the template now uses `{!! !!}` consistently, making the escape intent explicit and simplifying the inline JS
+
 ## [1.4.1] - 2026-03-15
 
 ### Fixed
@@ -127,7 +132,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - TallStackUI support (`x-ts-slide`, `x-ts-button`)
 - GitHub Actions: CI, code style, automatic CHANGELOG
 
-[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.1...HEAD
+[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.2...HEAD
+[1.4.2]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.1...v1.4.2
 [1.4.1]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.2.1...v1.3.0

@@ -21,7 +21,9 @@
     $labelKey = $selectMap['label'] ?? 'label';
     $valueKey = $selectMap['value'] ?? 'value';
 
-    // Build the options array Alpine will consume
+    // Build the options array Alpine will consume.
+    // JSON_HEX_* flags ensure all ", ', &, < and > inside values are Unicode-escaped,
+    // so the output is safe in both single-quoted and double-quoted HTML attributes.
     $alpineOptions = collect($options)
         ->map(fn ($opt) => ['label' => $opt[$labelKey] ?? '', 'value' => $opt[$valueKey] ?? ''])
         ->values()
@@ -35,6 +37,15 @@
             break;
         }
     }
+
+    // Pre-compute JS-safe values for the x-data attribute.
+    // Js::from() applies JSON_HEX_QUOT (and other HEX flags), so its output
+    // contains no literal ", ', & or < characters — safe with {!! !!} in any
+    // HTML attribute context regardless of the quote delimiter used.
+    $jsWireProperty   = \Illuminate\Support\Js::from($wireProperty);
+    $jsSelectedText   = \Illuminate\Support\Js::from(__('tall-icon-picker::icon-picker.selected'));
+    $jsPlaceholderText = \Illuminate\Support\Js::from(__('tall-icon-picker::icon-picker.select_placeholder'));
+    $jsMultiple       = $multiple ? 'true' : 'false';
 @endphp
 
 @if ($adapter === 'tallstackui')
@@ -52,10 +63,10 @@
          x-data='{
             open: false,
             search: "",
-            options: {{ $alpineOptions }},
-            selected: $wire.$entangle({{ Js::from($wireProperty) }}),
-            selectedText: {{ Js::from(__("tall-icon-picker::icon-picker.selected")) }},
-            placeholderText: {{ Js::from(__("tall-icon-picker::icon-picker.select_placeholder")) }},
+            options: {!! $alpineOptions !!},
+            selected: $wire.$entangle({!! $jsWireProperty !!}),
+            selectedText: {!! $jsSelectedText !!},
+            placeholderText: {!! $jsPlaceholderText !!},
             get filtered() {
                 return this.search === ""
                     ? this.options
@@ -65,7 +76,7 @@
                 return Array.isArray(this.selected) ? this.selected.includes(val) : this.selected === val;
             },
             toggle(val) {
-                if ({{ $multiple ? "true" : "false" }}) {
+                if ({!! $jsMultiple !!}) {
                     let idx = this.selected.indexOf(val);
                     if (idx > -1) { this.selected.splice(idx, 1); } else { this.selected.push(val); }
                 } else {
