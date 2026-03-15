@@ -27,7 +27,7 @@
                     </svg>
                 </span>
                 <span class="flex-1 text-left text-gray-400 dark:text-zinc-500">
-                    {{ __('tall-icon-picker::icon-picker.no_icon_selected') }}
+                    {{ $placeholder ?: __('tall-icon-picker::icon-picker.no_icon_selected') }}
                 </span>
             @endif
 

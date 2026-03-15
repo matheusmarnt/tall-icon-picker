@@ -20,6 +20,8 @@ class IconPicker extends Component
 
     public string $parentModel = '';
 
+    public string $placeholder = '';
+
     public bool $open = false;
 
     public string $search = '';
