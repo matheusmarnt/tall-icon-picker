@@ -24,7 +24,7 @@
     ])>
         <livewire:tall.icon-picker
             :parent-model="$resolvedModel"
-            :placeholder="$placeholder"
+            :placeholder="$placeholder ?? ''"
             {{ $attributes->whereStartsWith('wire:model') }}
         />
     </div>
