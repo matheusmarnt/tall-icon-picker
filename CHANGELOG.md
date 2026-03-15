@@ -7,6 +7,26 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [1.2.0] - 2026-03-14
+
+### Added
+- **Validation error display** — the Blade wrapper reads `$errors->first($resolvedModel)` using the `wire:model` field name and renders the error message below the field with `role="alert"` for screen-reader accessibility; label transitions to red when an error is active
+- **`hint` prop** — helper text rendered below the field with an info icon; hidden when a validation error is active (error takes priority)
+- **`placeholder` prop** — customises the empty-state text inside the trigger field; falls back to the `no_icon_selected` translation key when omitted; fixes missing default that would throw if the prop was absent
+- **`placeholder` on `IconPicker` component** — added `public string $placeholder = ''` to the Livewire component so the value flows from the Blade wrapper into the trigger view
+
+### Changed
+- **Mobile-first icon grid** — `grid-cols-5` on mobile (previously `grid-cols-4`), keeping `sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10`; 25% more icons visible on small screens without scrolling
+- **Trigger field redesigned** — full-width clickable button with subtle indigo hover state and a search icon indicator; clear button extracted as a standalone icon button with red hover feedback
+- **Icon tile hover** — `hover:scale-105` (softer than `hover:scale-110` at high density) + `group-hover:text-indigo-600/400` colour shift on the icon
+- **Pagination touch targets** — buttons enlarged to `h-9 w-9` (36 px) for better mobile usability
+- **Native drawer** — `@keydown.escape.window` closes the panel; `aria-label` added to the close button; panel is full-width on mobile, `sm:max-w-xl` on tablet
+- **Native button secondary** — explicit `bg-white dark:bg-zinc-800` with visible border for light/dark parity
+- **Native input** — corrected to light-mode-aware colours (`bg-white border-gray-200 text-gray-900`); previously used dark-only zinc palette
+
+### Fixed
+- **Parent property not updated on icon select / clear** — the old `$wire.$parent.$set()` Alpine call was removed in Livewire v4. Restored a reliable sync mechanism: the component now dispatches `icon-picked` from both `selectIcon()` and `clearIcon()`, and an Alpine `x-on:icon-picked.window` listener uses `Livewire.find()` + DOM traversal to call `.set(property, value)` on the parent Livewire component. A `$parentModel` filter prevents cross-picker interference when multiple pickers share the same page.
+
 ## [1.1.3] - 2026-03-14
 
 ### Fixed
@@ -64,7 +84,8 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Suporte a TallStackUI (`x-ts-slide`, `x-ts-button`)
 - GitHub Actions: CI, code style, CHANGELOG automático
 
-[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.3...HEAD
+[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.3...v1.2.0
 [1.1.3]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.0...v1.1.1
