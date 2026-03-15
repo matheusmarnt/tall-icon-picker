@@ -7,6 +7,11 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [1.2.1] - 2026-03-14
+
+### Fixed
+- `TypeError: Cannot assign null to property IconPicker::$placeholder of type string` — the Blade wrapper defaults `placeholder` to `null`; passing it directly to the Livewire component violated PHP 8 strict typing. Fixed with `$placeholder ?? ''` in the wrapper.
+
 ## [1.2.0] - 2026-03-14
 
 ### Added
@@ -84,7 +89,8 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Suporte a TallStackUI (`x-ts-slide`, `x-ts-button`)
 - GitHub Actions: CI, code style, CHANGELOG automático
 
-[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.2.1...HEAD
+[1.2.1]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.3...v1.2.0
 [1.1.3]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.1...v1.1.2
