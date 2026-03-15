@@ -7,6 +7,11 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [1.1.3] - 2026-03-14
+
+### Fixed
+- `Alpine Expression Error: Unexpected token ';'` and `selected/filtered/search is not defined` in the native `ui/select` component: the options JSON was embedded raw inside a double-quoted `x-data` attribute, causing the HTML parser to close the attribute at the first `"` in the JSON. Fixed by moving the JSON to a `data-options` attribute (rendered via `{{ }}` so `"` is HTML-escaped to `&quot;`) and reading it via `JSON.parse($el.dataset.options)` inside `x-data`
+
 ## [1.1.2] - 2026-03-14
 
 ### Fixed
@@ -59,7 +64,8 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Suporte a TallStackUI (`x-ts-slide`, `x-ts-button`)
 - GitHub Actions: CI, code style, CHANGELOG automático
 
-[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.3...HEAD
+[1.1.3]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.0.0...v1.1.0
