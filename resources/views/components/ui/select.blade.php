@@ -79,7 +79,7 @@
         class="relative"
     >
         @if ($label)
-            <label class="mb-1.5 block text-sm font-medium text-zinc-300">
+            <label class="py-1.5 block text-sm font-medium text-zinc-300">
                 {{ $label }}
             </label>
         @endif
