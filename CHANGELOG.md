@@ -7,10 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.3] - 2026-03-15
+
+### Fixed
+- **CRITICAL — `x-data` attribute still broken in consumers with published views** — even after v1.4.1 switched to single-quoted `x-data`, consumers who had previously published views retained the old double-quoted `x-data` with `{!! Js::from() !!}` inline, causing Alpine `Unexpected token '}'` and cascading `search/filtered/triggerText is not defined` errors. Root fix: the options JSON and locale strings are moved out of `x-data` entirely into `data-options`, `data-selected-text`, and `data-placeholder-text` HTML attributes rendered via `{{ }}` (htmlspecialchars); the `x-data` string now contains zero Blade-interpolated JSON or locale content and is safe regardless of HTML attribute quote style. Additionally, `$wire.$entangle()` is replaced with the proven v1.3.0 pattern — `get selected() { return $wire.property }` as a reactive getter and `$wire.set()` as an explicit setter — eliminating any risk of entangle cleanup or initialization-order issues.
+
 ## [1.4.2] - 2026-03-15
 
 ### Changed
-- **Pre-computed JS variables in native `ui/select`** — moved `Js::from()` calls out of the `x-data` template string into the `@php` block (`$jsWireProperty`, `$jsSelectedText`, `$jsPlaceholderText`, `$jsMultiple`); the template now uses `{!! !!}` consistently, making the escape intent explicit and simplifying the inline JS
+- **Pre-computed JS variables in native `ui/select`** — moved `Js::from()` calls out of the `x-data` template string into the `@php` block; no behaviour change
 
 ## [1.4.1] - 2026-03-15
 
@@ -132,7 +137,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - TallStackUI support (`x-ts-slide`, `x-ts-button`)
 - GitHub Actions: CI, code style, automatic CHANGELOG
 
-[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.2...HEAD
+[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.3...HEAD
+[1.4.3]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.2...v1.4.3
 [1.4.2]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.1...v1.4.2
 [1.4.1]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.3.0...v1.4.0

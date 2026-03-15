@@ -21,15 +21,14 @@
     $labelKey = $selectMap['label'] ?? 'label';
     $valueKey = $selectMap['value'] ?? 'value';
 
-    // Build the options array Alpine will consume.
-    // JSON_HEX_* flags ensure all ", ', &, < and > inside values are Unicode-escaped,
-    // so the output is safe in both single-quoted and double-quoted HTML attributes.
+    // {{ $alpineOptions }} (htmlspecialchars) encodes " as &quot;, which the browser
+    // decodes back to " before JSON.parse() runs — safe in any HTML attribute context.
     $alpineOptions = collect($options)
         ->map(fn ($opt) => ['label' => $opt[$labelKey] ?? '', 'value' => $opt[$valueKey] ?? ''])
         ->values()
-        ->toJson(JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+        ->toJson(JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS);
 
-    // Extract the Livewire property name from wire:model* attribute
+    // Wire property names are PHP identifiers — no characters that need escaping.
     $wireProperty = '';
     foreach ($attributes as $attrKey => $attrValue) {
         if (str_starts_with((string) $attrKey, 'wire:model')) {
@@ -37,15 +36,6 @@
             break;
         }
     }
-
-    // Pre-compute JS-safe values for the x-data attribute.
-    // Js::from() applies JSON_HEX_QUOT (and other HEX flags), so its output
-    // contains no literal ", ', & or < characters — safe with {!! !!} in any
-    // HTML attribute context regardless of the quote delimiter used.
-    $jsWireProperty   = \Illuminate\Support\Js::from($wireProperty);
-    $jsSelectedText   = \Illuminate\Support\Js::from(__('tall-icon-picker::icon-picker.selected'));
-    $jsPlaceholderText = \Illuminate\Support\Js::from(__('tall-icon-picker::icon-picker.select_placeholder'));
-    $jsMultiple       = $multiple ? 'true' : 'false';
 @endphp
 
 @if ($adapter === 'tallstackui')
@@ -59,16 +49,28 @@
         {{ $attributes->whereStartsWith('wire:model') }}
     />
 @else
+    {{-- Options JSON and locale strings live in data-* attributes rendered via {{ }}   --}}
+    {{-- (htmlspecialchars), making them safe in any HTML attribute quote style.         --}}
+    {{-- The x-data string contains zero Blade-interpolated JSON or locale content,     --}}
+    {{-- so it is safe in both single-quoted and double-quoted HTML attributes.          --}}
     <div class="flex flex-col gap-1"
-         x-data='{
+         data-options="{{ $alpineOptions }}"
+         data-selected-text="{{ __('tall-icon-picker::icon-picker.selected') }}"
+         data-placeholder-text="{{ __('tall-icon-picker::icon-picker.select_placeholder') }}"
+         x-data="{
             open: false,
-            search: "",
-            options: {!! $alpineOptions !!},
-            selected: $wire.$entangle({!! $jsWireProperty !!}),
-            selectedText: {!! $jsSelectedText !!},
-            placeholderText: {!! $jsPlaceholderText !!},
+            search: '',
+            options: JSON.parse($el.dataset.options),
+            get selected() {
+                const val = $wire.{{ $wireProperty }};
+                return {{ $multiple ? 'true' : 'false' }}
+                    ? (Array.isArray(val) ? val : (val ? [val] : []))
+                    : (val ?? null);
+            },
+            selectedText: $el.dataset.selectedText,
+            placeholderText: $el.dataset.placeholderText,
             get filtered() {
-                return this.search === ""
+                return this.search === ''
                     ? this.options
                     : this.options.filter(o => o.label.toLowerCase().includes(this.search.toLowerCase()));
             },
@@ -76,17 +78,20 @@
                 return Array.isArray(this.selected) ? this.selected.includes(val) : this.selected === val;
             },
             toggle(val) {
-                if ({!! $jsMultiple !!}) {
-                    let idx = this.selected.indexOf(val);
-                    if (idx > -1) { this.selected.splice(idx, 1); } else { this.selected.push(val); }
+                if ({{ $multiple ? 'true' : 'false' }}) {
+                    const current = Array.isArray(this.selected) ? this.selected : [];
+                    const updated = current.includes(val)
+                        ? current.filter(v => v !== val)
+                        : [...current, val];
+                    $wire.set('{{ $wireProperty }}', updated);
                 } else {
-                    this.selected = val;
+                    $wire.set('{{ $wireProperty }}', val);
                     this.open = false;
                 }
             },
             get triggerText() {
                 if (Array.isArray(this.selected) && this.selected.length > 0) {
-                    return this.selected.length + " " + this.selectedText;
+                    return this.selected.length + ' ' + this.selectedText;
                 }
                 if (!Array.isArray(this.selected) && this.selected) {
                     const opt = this.options.find(o => o.value === this.selected);
@@ -94,7 +99,7 @@
                 }
                 return this.placeholderText;
             }
-         }'
+         }"
     >
         @if ($label)
             <label class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $label }}</label>
