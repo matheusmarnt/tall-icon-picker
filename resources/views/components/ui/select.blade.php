@@ -47,10 +47,11 @@
     />
 @else
     <div
+        data-options="{{ $alpineOptions }}"
         x-data="{
             open: false,
             search: '',
-            options: {!! $alpineOptions !!},
+            options: JSON.parse($el.dataset.options),
             get selected() { return $wire.{{ $wireProperty }} || []; },
             get filtered() {
                 if (!this.search) return this.options;
