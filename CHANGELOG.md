@@ -1,18 +1,18 @@
 # Changelog
 
-Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
+All notable changes to this project will be documented in this file.
 
-O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
-e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
 ## [1.4.1] - 2026-03-15
 
 ### Fixed
-- **CRÍTICO — `x-data` truncado no `ui/select` nativo (pt_BR e qualquer locale com aspas)** — `@js()` emite valores delimitados por aspas duplas literais; dentro de `x-data="..."` (também delimitado por `"`), o parser HTML5 encerrava o atributo ao encontrar a primeira `"` interna, corrompendo o DOM e interrompendo a inicialização de **todos** os componentes Alpine/Livewire da página sem nenhum erro no console. Corrigido trocando o delimitador do atributo para aspas simples (`x-data='...'`) e substituindo `@js()` por `{{ Js::from(...) }}`, cuja saída usa `JSON_HEX_QUOT` e é segura em qualquer contexto de atributo HTML
-- **Memory leak em `@entangle` no `ui/select` nativo (Livewire 4)** — `@entangle($wireProperty)` compilava para `window.Livewire.find(id).entangle(name)`, que no Livewire 4 recebia `cleanup2 = undefined` e nunca liberava o listener ao destruir o componente. Substituído por `$wire.$entangle({{ Js::from($wireProperty) }})`, que passa pelo caminho correto do Alpine magic com cleanup automático
-- **Ordem de boot no `TallIconPickerServiceProvider`** — `Config::set('tall-icon-picker.ui', ...)` era chamado imediatamente em `boot()` enquanto o registro dos componentes Livewire era adiado para `booted()`. Movido o `Config::set` para dentro do callback `booted()`, antes das registrações, garantindo que a resolução do adapter ocorra no mesmo contexto do registro dos componentes
+- **CRITICAL — truncated `x-data` in native `ui/select` (pt_BR and any locale containing quotes)** — `@js()` emits values delimited by literal double quotes; inside `x-data="..."` (also delimited by `"`), the HTML5 parser terminated the attribute at the first inner `"`, corrupting the DOM and silently breaking the initialisation of **all** Alpine/Livewire components on the page with no console errors. Fixed by switching the attribute delimiter to single quotes (`x-data='...'`) and replacing `@js()` with `{{ Js::from(...) }}`, whose output uses `JSON_HEX_QUOT` and is safe in any HTML attribute context
+- **Memory leak in `@entangle` in native `ui/select` (Livewire 4)** — `@entangle($wireProperty)` compiled to `window.Livewire.find(id).entangle(name)`, which in Livewire 4 received `cleanup2 = undefined` and never released the listener when the component was destroyed. Replaced with `$wire.$entangle({{ Js::from($wireProperty) }})`, which routes through the correct Alpine magic path with automatic cleanup
+- **Boot order in `TallIconPickerServiceProvider`** — `Config::set('tall-icon-picker.ui', ...)` was called immediately in `boot()` while Livewire component registration was deferred to `booted()`. Moved `Config::set` inside the `booted()` callback, before the registrations, ensuring adapter resolution and component registration share the same context
 
 ## [1.4.0] - 2026-03-15
 
@@ -121,11 +121,11 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 ## [1.0.0] - 2026-03-12
 
 ### Added
-- Componente Livewire `IconPicker` com suporte a múltiplas bibliotecas Blade Icons
-- `IconDiscoveryService` para descoberta de SVGs via filesystem
-- Config publicável `tall-icon-picker.php`
-- Suporte a TallStackUI (`x-ts-slide`, `x-ts-button`)
-- GitHub Actions: CI, code style, CHANGELOG automático
+- `IconPicker` Livewire component with support for multiple Blade Icons libraries
+- `IconDiscoveryService` for SVG discovery via filesystem
+- Publishable `tall-icon-picker.php` config file
+- TallStackUI support (`x-ts-slide`, `x-ts-button`)
+- GitHub Actions: CI, code style, automatic CHANGELOG
 
 [Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.1...HEAD
 [1.4.1]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.0...v1.4.1
