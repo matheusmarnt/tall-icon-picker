@@ -6,7 +6,7 @@
   <img src="https://img.shields.io/badge/PHP-8.2%2B-blue" alt="PHP Version">
   <img src="https://img.shields.io/badge/Laravel-12.0%2B-red" alt="Laravel Version">
   <img src="https://img.shields.io/badge/Livewire-3.0%2B%204.0-pink" alt="Livewire Version">
-  <img src="https://img.shields.io/badge/TallStackUI-v2_optional-emerald" alt="TallStackUI Version">
+  <img src="https://img.shields.io/badge/TallStackUI-v2_required-emerald" alt="TallStackUI Version">
 </p>
 
 <p align="center">
@@ -23,7 +23,7 @@ Unlike traditional pickers that load massive arrays into memory, **TALL Icon Pic
 |---|---|
 | **Optimized I/O (`IconDiscoveryService`)** | SVG file scanning runs in isolation, reading artifacts directly from the `vendor` directory only when requested. |
 | **Lazy Loading & Pagination** | Thousands of icons are processed on demand and paginated in the backend, keeping the browser DOM and Livewire payload extremely lightweight. |
-| **Dual UI Adapter** | Automatically detects whether TallStackUI is installed and routes to the appropriate Livewire view. Each adapter has a fully self-contained view: `icon-picker-tallstackui.blade.php` for TallStackUI and `icon-picker.blade.php` for the native Alpine.js/Tailwind experience, featuring a clean blue design system with `scale-110` hover effects, animated loading states, and mobile-first pagination. |
+| **UI Adapter** | Routes rendering through TallStackUI v2 (`x-ts-*` components). Native Alpine.js/Tailwind adapter files are preserved and will be re-enabled in a future release once the redesign is complete. |
 | **Extensibility (OCP)** | Open for extension via the config file (`config/tall-icon-picker.php`), allowing new icon libraries to be injected without modifying the package core. |
 | **Batteries-Included** | Pre-configured for 15+ widely-used collections (Lucide, Phosphor, FontAwesome, Heroicons, etc.). |
 | **i18n** | Native multi-language support. Ships with `en` and `pt_BR` — extensible by publishing the translation files. |
@@ -37,7 +37,7 @@ Unlike traditional pickers that load massive arrays into memory, **TALL Icon Pic
 | PHP | `^8.2`                              |
 | Laravel | `^11.0` or `^12.0`                  |
 | Livewire | `^3.0` or `^4.0`                    |
-| TallStackUI | `^2.0` *(optional — auto-detected)* |
+| TallStackUI | `^2.0` *(required in v2.x — native mode suspended)* |
 
 ---
 
@@ -47,7 +47,7 @@ Unlike traditional pickers that load massive arrays into memory, **TALL Icon Pic
 composer require matheusmarnt/tall-icon-picker
 ```
 
-> **Note:** Composer will automatically install `blade-ui-kit/blade-icons` and all linked icon libraries. TallStackUI is a suggested dependency — if it is already installed in your project it will be used automatically; otherwise the native components will be activated.
+> **Note:** Composer will automatically install `blade-ui-kit/blade-icons` and all linked icon libraries. **TallStackUI v2 is required** in v2.x — the package renders exclusively through `x-ts-*` components. Native mode will return in a future release.
 
 ### Updating
 
@@ -78,14 +78,6 @@ The generated `config/tall-icon-picker.php` exposes two sections:
 ```php
 return [
 
-    /*
-     | UI Adapter
-     | 'auto'        — detects TallStackUI via class_exists (default)
-     | 'tallstackui' — forces the x-ts-* components
-     | 'native'      — forces the native Alpine.js/Tailwind components
-     */
-    'ui' => env('TALL_ICON_PICKER_UI', 'auto'),
-
     'libraries' => [
         'lucide'    => ['package' => 'mallardduck/blade-lucide-icons', 'path' => 'resources/svg', 'label' => 'Lucide'],
         'heroicons' => ['package' => 'blade-ui-kit/blade-heroicons',   'path' => 'resources/svg', 'label' => 'Heroicons'],
@@ -95,12 +87,7 @@ return [
 ];
 ```
 
-To force a specific adapter via `.env`:
-
-```dotenv
-TALL_ICON_PICKER_UI=native      # always native
-TALL_ICON_PICKER_UI=tallstackui # always TallStackUI
-```
+> **v2.x note:** The `'ui'` adapter key and `TALL_ICON_PICKER_UI` env variable have been removed. The package always renders through TallStackUI v2 in this version.
 
 ---
 

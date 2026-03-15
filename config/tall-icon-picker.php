@@ -5,21 +5,6 @@ declare(strict_types=1);
 return [
     /*
     |--------------------------------------------------------------------------
-    | UI Adapter
-    |--------------------------------------------------------------------------
-    |
-    | Controls which UI component library is used to render the picker's
-    | interface elements (slide panel, buttons, inputs, select).
-    |
-    | 'auto'        — detects TallStackUI at boot time via class_exists.
-    | 'tallstackui' — always use TallStackUI v2 components (x-ts-*).
-    | 'native'      — always use the built-in Alpine.js/Tailwind components.
-    |
-    */
-    'ui' => env('TALL_ICON_PICKER_UI', 'auto'),
-
-    /*
-    |--------------------------------------------------------------------------
     | Supported Icon Libraries
     |--------------------------------------------------------------------------
     |

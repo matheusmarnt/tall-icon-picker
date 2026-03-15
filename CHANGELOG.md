@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-03-15
+
+### Changed
+
+- **Native mode suspended** — `resolveUiAdapter()` now returns `'tallstackui'` unconditionally; the `'ui'` config key and `TALL_ICON_PICKER_UI` env variable no longer affect runtime behavior. All native adapter files (`ui/button`, `ui/input`, `ui/select`, `ui/drawer`, `icon-picker.blade.php`) are preserved in full and will be re-enabled once the native UI redesign is complete.
+- **`'ui'` key removed from config** — `config/tall-icon-picker.php` no longer publishes the `'ui'` entry; the adapter is always set to `'tallstackui'` by the service provider at boot time.
+- **TallStackUI `^2.0` is now a required runtime dependency** — previously suggested (auto-detected); now it must be present as the package renders exclusively through `x-ts-*` components until native mode is restored. Update `composer.json` to move `tallstackui/tallstackui` from `suggest` to `require` if your project uses the picker.
+- **Tests updated** — `TallIconPickerServiceProviderTest` now asserts that `resolveUiAdapter()` returns `'tallstackui'` for every input value (`'tallstackui'`, `'auto'`, `'native'`).
+
 ## [2.0.0] - 2026-03-15
 
 ### Changed
@@ -164,7 +173,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - TallStackUI support (`x-ts-slide`, `x-ts-button`)
 - GitHub Actions: CI, code style, automatic CHANGELOG
 
-[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.5.0...v2.0.0
 [1.5.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.3...v1.5.0
 [1.4.3]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.2...v1.4.3
