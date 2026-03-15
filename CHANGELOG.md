@@ -7,6 +7,25 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-03-15
+
+### Added
+- **Dedicated native view** — the native adapter now renders a fully self-contained Blade view (`icon-picker.blade.php`) that never touches TallStackUI components; the TallStackUI path routes to its own preserved view (`icon-picker-tallstackui.blade.php`); `render()` in `IconPicker` picks the correct view based on `config('tall-icon-picker.ui')`
+- **Inline library multi-select** — the native view embeds its own Alpine-powered multi-select (light-mode-first: `bg-white border-gray-200`) directly in the filter panel; no longer delegates to the `ui/select` adapter component in the native path
+- **Filter panel label row** — small `text-xs` labels ("Libraries", "Search") appear above each filter inside the panel for improved scannability
+
+### Changed
+- **`aspect-square` icon tiles** — icon grid buttons now enforce equal width and height via `aspect-square`; the previous fixed-height approach caused inconsistent tile sizes on some viewport widths
+- **Hover lift effect on icon tiles** — `hover:-translate-y-1 hover:shadow-md` replaces `hover:scale-105`; the vertical lift communicates interactivity more clearly at high icon density without visual crowding
+- **Filters layout** — search and library selector are grouped in a unified `bg-gray-50 dark:bg-zinc-800/60 rounded-xl` panel; on `md:` and above they sit side-by-side in a 2-column grid
+- **Stats bar** — now rendered as a `bg-gray-50 dark:bg-zinc-800/40 rounded-lg` pill row; active search term is highlighted in `text-indigo-600` next to a `·` separator
+- **Scoped loading states** — skeleton and grid use `wire:target="search, libraries, page"` instead of bare `wire:loading`, so unrelated Livewire requests no longer trigger the skeleton
+- **Pagination arrows** — replaced HTML entity `‹ ›` with explicit `<svg>` chevron paths (`M15 19l-7-7 7-7` / `M9 5l7 7-7 7`) for pixel-perfect rendering across all browsers and font stacks
+- **Empty state** — surrounded by a `border-dashed border-gray-200 rounded-xl` container to reinforce the empty region boundary
+- **Choose button** — redesigned with indigo accent (`bg-indigo-50 border-indigo-200 text-indigo-700`) and `active:scale-95` micro-animation; visually distinct from neutral secondary buttons
+- **Cancel button in drawer footer** — now rendered as an inline `<button>` with full light/dark styling instead of the `x-tall::ui.button` adapter component, ensuring consistent appearance in the native path
+- **Skeleton count** — increased from 50 to 60 placeholder tiles to match the new default `perPage` value and fill the grid uniformly
+
 ## [1.2.1] - 2026-03-14
 
 ### Fixed
@@ -89,7 +108,8 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Suporte a TallStackUI (`x-ts-slide`, `x-ts-button`)
 - GitHub Actions: CI, code style, CHANGELOG automático
 
-[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.2.1...HEAD
+[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.2.1...v1.3.0
 [1.2.1]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.3...v1.2.0
 [1.1.3]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.2...v1.1.3
