@@ -7,6 +7,18 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-03-15
+
+### Added
+- **New i18n keys for native adapter** — `libraries_hint`, `search_label`, `search_hint`, `clear_filters`, `previous_page`, `next_page`, `selected`, and `select_placeholder` added to both `en` and `pt_BR` locale files, completing i18n coverage for every user-facing string in the native UI path
+
+### Changed
+- **Native view fully i18n-aware** — `icon-picker.blade.php` now resolves every label, hint, placeholder, aria-label, and button text through `__('tall-icon-picker::icon-picker.*')` with no hardcoded English strings remaining
+- **Native UI adapter components i18n-aware** — `ui/select.blade.php` reads `selected` and `select_placeholder` translations via `@js(__(...))` so Alpine receives the correct locale text at render time; `ui/input.blade.php` and `ui/button.blade.php` delegate labels/hints to the caller view, keeping adapter components locale-agnostic
+
+### Fixed
+- **`svg()` exception in icon grid** — `{!! svg($icon) !!}` in the icon grid is now wrapped in a `@php try/catch (\Throwable) @endphp` block, consistent with the existing guard in `selectedIconSvg`; prevents fatal view exceptions when an icon slug cannot be resolved (e.g. in test environments with mocked paginator results)
+
 ## [1.3.0] - 2026-03-15
 
 ### Added
@@ -108,7 +120,8 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Suporte a TallStackUI (`x-ts-slide`, `x-ts-button`)
 - GitHub Actions: CI, code style, CHANGELOG automático
 
-[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.2.1...v1.3.0
 [1.2.1]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.3...v1.2.0
