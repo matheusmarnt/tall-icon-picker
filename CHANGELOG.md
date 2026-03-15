@@ -1,11 +1,18 @@
 # Changelog
 
-Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
+All notable changes to this project will be documented in this file.
 
-O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/),
-e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.4.1] - 2026-03-15
+
+### Fixed
+- **CRITICAL — truncated `x-data` in native `ui/select` (pt_BR and any locale containing quotes)** — `@js()` emits values delimited by literal double quotes; inside `x-data="..."` (also delimited by `"`), the HTML5 parser terminated the attribute at the first inner `"`, corrupting the DOM and silently breaking the initialisation of **all** Alpine/Livewire components on the page with no console errors. Fixed by switching the attribute delimiter to single quotes (`x-data='...'`) and replacing `@js()` with `{{ Js::from(...) }}`, whose output uses `JSON_HEX_QUOT` and is safe in any HTML attribute context
+- **Memory leak in `@entangle` in native `ui/select` (Livewire 4)** — `@entangle($wireProperty)` compiled to `window.Livewire.find(id).entangle(name)`, which in Livewire 4 received `cleanup2 = undefined` and never released the listener when the component was destroyed. Replaced with `$wire.$entangle({{ Js::from($wireProperty) }})`, which routes through the correct Alpine magic path with automatic cleanup
+- **Boot order in `TallIconPickerServiceProvider`** — `Config::set('tall-icon-picker.ui', ...)` was called immediately in `boot()` while Livewire component registration was deferred to `booted()`. Moved `Config::set` inside the `booted()` callback, before the registrations, ensuring adapter resolution and component registration share the same context
 
 ## [1.4.0] - 2026-03-15
 
@@ -114,13 +121,14 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 ## [1.0.0] - 2026-03-12
 
 ### Added
-- Componente Livewire `IconPicker` com suporte a múltiplas bibliotecas Blade Icons
-- `IconDiscoveryService` para descoberta de SVGs via filesystem
-- Config publicável `tall-icon-picker.php`
-- Suporte a TallStackUI (`x-ts-slide`, `x-ts-button`)
-- GitHub Actions: CI, code style, CHANGELOG automático
+- `IconPicker` Livewire component with support for multiple Blade Icons libraries
+- `IconDiscoveryService` for SVG discovery via filesystem
+- Publishable `tall-icon-picker.php` config file
+- TallStackUI support (`x-ts-slide`, `x-ts-button`)
+- GitHub Actions: CI, code style, automatic CHANGELOG
 
-[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.1...HEAD
+[1.4.1]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.2.1...v1.3.0
 [1.2.1]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.2.0...v1.2.1

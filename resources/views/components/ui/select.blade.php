@@ -49,15 +49,15 @@
     />
 @else
     <div class="flex flex-col gap-1"
-         x-data="{
+         x-data='{
             open: false,
-            search: '',
+            search: "",
             options: {{ $alpineOptions }},
-            selected: @entangle($wireProperty),
-            selectedText: @js(__('tall-icon-picker::icon-picker.selected')),
-            placeholderText: @js(__('tall-icon-picker::icon-picker.select_placeholder')),
+            selected: $wire.$entangle({{ Js::from($wireProperty) }}),
+            selectedText: {{ Js::from(__("tall-icon-picker::icon-picker.selected")) }},
+            placeholderText: {{ Js::from(__("tall-icon-picker::icon-picker.select_placeholder")) }},
             get filtered() {
-                return this.search === ''
+                return this.search === ""
                     ? this.options
                     : this.options.filter(o => o.label.toLowerCase().includes(this.search.toLowerCase()));
             },
@@ -65,7 +65,7 @@
                 return Array.isArray(this.selected) ? this.selected.includes(val) : this.selected === val;
             },
             toggle(val) {
-                if ({{ $multiple ? 'true' : 'false' }}) {
+                if ({{ $multiple ? "true" : "false" }}) {
                     let idx = this.selected.indexOf(val);
                     if (idx > -1) { this.selected.splice(idx, 1); } else { this.selected.push(val); }
                 } else {
@@ -75,7 +75,7 @@
             },
             get triggerText() {
                 if (Array.isArray(this.selected) && this.selected.length > 0) {
-                    return this.selected.length + ' ' + this.selectedText;
+                    return this.selected.length + " " + this.selectedText;
                 }
                 if (!Array.isArray(this.selected) && this.selected) {
                     const opt = this.options.find(o => o.value === this.selected);
@@ -83,7 +83,7 @@
                 }
                 return this.placeholderText;
             }
-         }"
+         }'
     >
         @if ($label)
             <label class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $label }}</label>
