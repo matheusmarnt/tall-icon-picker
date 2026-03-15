@@ -20,6 +20,8 @@ class IconPicker extends Component
 
     public string $parentModel = '';
 
+    public string $placeholder = '';
+
     public bool $open = false;
 
     public string $search = '';
@@ -98,6 +100,10 @@ class IconPicker extends Component
     public function clearIcon(): void
     {
         $this->value = '';
+
+        if ($this->parentModel !== '') {
+            $this->dispatch('icon-picked', property: $this->parentModel, value: '');
+        }
     }
 
     public function nextPage(): void

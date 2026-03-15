@@ -108,13 +108,35 @@ TALL_ICON_PICKER_UI=tallstackui # always TallStackUI
 
 ### Via Blade Component (Recommended)
 
-The Blade wrapper implicitly mounts the Livewire component and supports the `label` attribute:
+The Blade wrapper mounts the Livewire component and exposes the following props:
+
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `wire:model` | `string` | — | Livewire property to bind the selected icon value |
+| `label` | `string\|null` | `null` | Field label rendered above the trigger |
+| `placeholder` | `string\|null` | `null` | Custom empty-state text inside the trigger field |
+| `hint` | `string\|null` | `null` | Helper text below the field (hidden when a validation error is active) |
 
 ```html
 <x-tall::icon-picker
     wire:model="system_icon"
-    label="Select the icon for the module"
+    label="Module icon"
+    placeholder="Select an icon..."
+    hint="This icon will appear in the sidebar menu."
 />
+```
+
+**Validation errors** are displayed automatically — no extra configuration needed. The wrapper reads the `$errors` bag using the field name from `wire:model` and renders the error message below the field:
+
+```php
+// In the parent Livewire component
+#[Validate('required|string')]
+public string $system_icon = '';
+```
+
+```html
+{{-- The error for 'system_icon' is shown automatically --}}
+<x-tall::icon-picker wire:model="system_icon" label="Module icon" />
 ```
 
 ### Via Direct Livewire Tag
@@ -129,7 +151,7 @@ The Blade wrapper implicitly mounts the Livewire component and supports the `lab
 
 > **Livewire v4 note:** Use `tall.icon-picker` (dot notation). Livewire v4 dropped support for `::` as a namespace separator in component tags. The `<x-tall::icon-picker>` Blade wrapper is unaffected and works with both versions.
 
-> **Under the Hood:** When an icon is selected, the Livewire component dispatches an `icon-picked` event mapped to the `$parentModel` property, ensuring reactive synchronisation with the parent component.
+> **Under the Hood:** When an icon is selected, the Livewire component dispatches an `icon-picked` browser event. An Alpine listener on the component's root element uses `Livewire.find()` to locate the parent Livewire component in the DOM and call `.set(property, value)` directly — compatible with Livewire v3 and v4.
 
 ---
 
