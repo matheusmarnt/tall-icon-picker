@@ -61,7 +61,12 @@
             open: false,
             search: '',
             options: JSON.parse($el.dataset.options),
-            selected: $wire.$entangle('{{ $wireProperty }}'),
+            get selected() {
+                const val = $wire.{{ $wireProperty }};
+                return {{ $multiple ? 'true' : 'false' }}
+                    ? (Array.isArray(val) ? val : (val ? [val] : []))
+                    : (val ?? null);
+            },
             selectedText: $el.dataset.selectedText,
             placeholderText: $el.dataset.placeholderText,
             get filtered() {
@@ -74,10 +79,13 @@
             },
             toggle(val) {
                 if ({{ $multiple ? 'true' : 'false' }}) {
-                    let idx = this.selected.indexOf(val);
-                    if (idx > -1) { this.selected.splice(idx, 1); } else { this.selected.push(val); }
+                    const current = Array.isArray(this.selected) ? this.selected : [];
+                    const updated = current.includes(val)
+                        ? current.filter(v => v !== val)
+                        : [...current, val];
+                    $wire.set('{{ $wireProperty }}', updated);
                 } else {
-                    this.selected = val;
+                    $wire.set('{{ $wireProperty }}', val);
                     this.open = false;
                 }
             },
