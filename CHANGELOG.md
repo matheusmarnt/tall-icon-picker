@@ -7,6 +7,13 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [1.4.1] - 2026-03-15
+
+### Fixed
+- **CRÍTICO — `x-data` truncado no `ui/select` nativo (pt_BR e qualquer locale com aspas)** — `@js()` emite valores delimitados por aspas duplas literais; dentro de `x-data="..."` (também delimitado por `"`), o parser HTML5 encerrava o atributo ao encontrar a primeira `"` interna, corrompendo o DOM e interrompendo a inicialização de **todos** os componentes Alpine/Livewire da página sem nenhum erro no console. Corrigido trocando o delimitador do atributo para aspas simples (`x-data='...'`) e substituindo `@js()` por `{{ Js::from(...) }}`, cuja saída usa `JSON_HEX_QUOT` e é segura em qualquer contexto de atributo HTML
+- **Memory leak em `@entangle` no `ui/select` nativo (Livewire 4)** — `@entangle($wireProperty)` compilava para `window.Livewire.find(id).entangle(name)`, que no Livewire 4 recebia `cleanup2 = undefined` e nunca liberava o listener ao destruir o componente. Substituído por `$wire.$entangle({{ Js::from($wireProperty) }})`, que passa pelo caminho correto do Alpine magic com cleanup automático
+- **Ordem de boot no `TallIconPickerServiceProvider`** — `Config::set('tall-icon-picker.ui', ...)` era chamado imediatamente em `boot()` enquanto o registro dos componentes Livewire era adiado para `booted()`. Movido o `Config::set` para dentro do callback `booted()`, antes das registrações, garantindo que a resolução do adapter ocorra no mesmo contexto do registro dos componentes
+
 ## [1.4.0] - 2026-03-15
 
 ### Added
@@ -120,7 +127,8 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Suporte a TallStackUI (`x-ts-slide`, `x-ts-button`)
 - GitHub Actions: CI, code style, CHANGELOG automático
 
-[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.0...HEAD
+[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.1...HEAD
+[1.4.1]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.2.1...v1.3.0
 [1.2.1]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.2.0...v1.2.1
