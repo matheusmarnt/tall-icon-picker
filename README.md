@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  A highly optimized and extensible icon picker component for Laravel applications built on the <strong>TALL Stack</strong> (TailwindCSS, Alpine.js, Livewire, Laravel). Built with a focus on <strong>Clean Architecture</strong> and performance, this package delegates rendering to the <a href="https://github.com/driesvints/blade-icons">Blade Icons</a> engine and provides a modern interface that works with or without <a href="https://tallstackui.com/">TallStackUI</a>.
+  A highly optimized and extensible icon picker component for Laravel applications built on the <strong>TALL Stack</strong> (TailwindCSS, Alpine.js, Livewire, Laravel). Built with a focus on <strong>Clean Architecture</strong> and performance, this package delegates rendering to the <a href="https://github.com/driesvints/blade-icons">Blade Icons</a> engine and provides a modern interface powered by <a href="https://tallstackui.com/">TallStackUI v2</a>.
 </p>
 
 ---
@@ -23,7 +23,7 @@ Unlike traditional pickers that load massive arrays into memory, **TALL Icon Pic
 |---|---|
 | **Optimized I/O (`IconDiscoveryService`)** | SVG file scanning runs in isolation, reading artifacts directly from the `vendor` directory only when requested. |
 | **Lazy Loading & Pagination** | Thousands of icons are processed on demand and paginated in the backend, keeping the browser DOM and Livewire payload extremely lightweight. |
-| **UI Adapter** | Routes rendering through TallStackUI v2 (`x-ts-*` components). Native Alpine.js/Tailwind adapter files are preserved and will be re-enabled in a future release once the redesign is complete. |
+| **UI Adapter** | Renders exclusively through TallStackUI v2 (`x-ts-*` components) in v2.x. Native Alpine.js/Tailwind adapter files are preserved in the package and will be re-enabled in a future release. |
 | **Extensibility (OCP)** | Open for extension via the config file (`config/tall-icon-picker.php`), allowing new icon libraries to be injected without modifying the package core. |
 | **Batteries-Included** | Pre-configured for 15+ widely-used collections (Lucide, Phosphor, FontAwesome, Heroicons, etc.). |
 | **i18n** | Native multi-language support. Ships with `en` and `pt_BR` — extensible by publishing the translation files. |
@@ -67,13 +67,13 @@ php artisan view:clear
 
 ## 🛠️ Configuration
 
-The package works out of the box (**plug-and-play**). Publish the config file to customise the indexed libraries and the UI adapter:
+The package works out of the box (**plug-and-play**). Publish the config file to customise the indexed libraries:
 
 ```bash
 php artisan vendor:publish --tag="tall-icon-picker-config"
 ```
 
-The generated `config/tall-icon-picker.php` exposes two sections:
+The generated `config/tall-icon-picker.php` exposes the `libraries` section:
 
 ```php
 return [
@@ -87,7 +87,7 @@ return [
 ];
 ```
 
-> **v2.x note:** The `'ui'` adapter key and `TALL_ICON_PICKER_UI` env variable have been removed. The package always renders through TallStackUI v2 in this version.
+> **v2.x note:** The `'ui'` adapter key and `TALL_ICON_PICKER_UI` env variable have been removed. The package always renders through TallStackUI v2 — no configuration is needed for the UI adapter.
 
 ---
 
@@ -224,14 +224,14 @@ Publish the views to override the picker layout or empty states:
 php artisan vendor:publish --tag="tall-icon-picker-views"
 ```
 
-Views are placed in `resources/views/vendor/tall`. The two Livewire views can be customised independently:
+Views are placed in `resources/views/vendor/tall`. The active view can be customised:
 
 | File | Description |
 |---|---|
-| `livewire/icon-picker.blade.php` | Native Alpine.js/Tailwind view |
-| `livewire/icon-picker-tallstackui.blade.php` | TallStackUI (`x-ts-*`) view |
+| `livewire/icon-picker-tallstackui.blade.php` | TallStackUI (`x-ts-*`) view — **active in v2.x** |
+| `livewire/icon-picker.blade.php` | Native Alpine.js/Tailwind view *(suspended — preserved for a future release)* |
 
-The shared UI adapter components (`ui/drawer`, `ui/button`, `ui/select`, `ui/input`) are used by the TallStackUI path and can also be customised individually.
+The shared UI adapter components (`ui/drawer`, `ui/button`, `ui/select`, `ui/input`) wrap TallStackUI and native rendering in a single file each. Only the TallStackUI branch is reached at runtime in v2.x.
 
 ### Publishing only the translations
 
@@ -258,14 +258,6 @@ The renderer applies the classes passed via `class=""`. Make sure your Tailwind 
 **`x-dynamic-component` throwing `View not found`**
 
 The Blade Icons component for that icon is not registered. Verify that the corresponding library is installed via Composer and that its `ServiceProvider` is being loaded.
-
-**Native components without animations**
-
-The native components use Alpine.js `x-cloak`. Add this to your global CSS:
-
-```css
-[x-cloak] { display: none !important; }
-```
 
 ---
 
