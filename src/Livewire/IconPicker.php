@@ -100,6 +100,10 @@ class IconPicker extends Component
     public function clearIcon(): void
     {
         $this->value = '';
+
+        if ($this->parentModel !== '') {
+            $this->dispatch('icon-picked', property: $this->parentModel, value: '');
+        }
     }
 
     public function nextPage(): void

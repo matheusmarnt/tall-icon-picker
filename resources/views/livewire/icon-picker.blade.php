@@ -1,4 +1,18 @@
-<div wire:cloak>
+<div
+    wire:cloak
+    x-data
+    x-on:icon-picked.window="
+        if ($event.detail.property !== @js($parentModel)) return;
+        const self = $el.closest('[wire\\:id]');
+        const parent = self?.parentElement?.closest('[wire\\:id]');
+        if (parent) {
+            Livewire.find(parent.getAttribute('wire:id'))?.set(
+                $event.detail.property,
+                $event.detail.value
+            );
+        }
+    "
+>
 
     {{-- ── Trigger row ─────────────────────────────────────────── --}}
     <div class="flex flex-wrap items-center gap-2">
