@@ -9,7 +9,7 @@ function resolveAdapter(string $uiConfig): string
 {
     config()->set('tall-icon-picker.ui', $uiConfig);
     $provider = new TallIconPickerServiceProvider(app());
-    $method   = new ReflectionMethod($provider, 'resolveUiAdapter');
+    $method = new ReflectionMethod($provider, 'resolveUiAdapter');
     $method->setAccessible(true);
 
     return $method->invoke($provider);
@@ -32,8 +32,8 @@ it('always resolves to tallstackui regardless of config — native mode is suspe
 });
 
 it('always renders the tallstackui view', function () {
-    $component = new IconPicker();
-    $rendered  = $component->render();
+    $component = new IconPicker;
+    $rendered = $component->render();
 
     expect($rendered->getName())->toBe('tall::livewire.icon-picker-tallstackui');
 });
