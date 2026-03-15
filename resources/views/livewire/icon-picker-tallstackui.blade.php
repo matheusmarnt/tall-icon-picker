@@ -32,7 +32,7 @@
                 <span class="flex h-5 w-5 shrink-0 items-center justify-center text-indigo-500 dark:text-indigo-400">
                     {!! $this->selectedIconSvg !!}
                 </span>
-                <span class="flex-1 truncate text-left text-gray-700 dark:text-gray-200">{{ $value }}</span>
+                <span class="flex-1 truncate text-left text-gray-700 dark:text-gray-200 ml-2">{{ $value }}</span>
             @else
                 <span class="flex h-5 w-5 shrink-0 items-center justify-center text-gray-300 dark:text-zinc-600">
                     <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
