@@ -7,6 +7,12 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
 ## [Unreleased]
 
+## [1.1.2] - 2026-03-14
+
+### Fixed
+- `ComponentNotFoundException: Unable to find component [tall::icon-picker]` on Livewire v4: Livewire v4 dropped `::` as a namespace separator in component tags; the component is now registered under both `tall.icon-picker` (v4 dot notation) and `tall::icon-picker` (v3 backward compat)
+- Blade wrapper updated to use `<livewire:tall.icon-picker>` — compatible with both Livewire v3 and v4
+
 ## [1.1.1] - 2026-03-14
 
 ### Fixed
@@ -53,7 +59,8 @@ e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 - Suporte a TallStackUI (`x-ts-slide`, `x-ts-button`)
 - GitHub Actions: CI, code style, CHANGELOG automático
 
-[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.2...HEAD
+[1.1.2]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/matheusmarnt/tall-icon-picker/releases/tag/v1.0.0

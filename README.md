@@ -120,8 +120,14 @@ The Blade wrapper implicitly mounts the Livewire component and supports the `lab
 ### Via Direct Livewire Tag
 
 ```html
+{{-- Livewire v4 (dot notation) --}}
+<livewire:tall.icon-picker wire:model="system_icon" />
+
+{{-- Livewire v3 (double-colon notation) --}}
 <livewire:tall::icon-picker wire:model="system_icon" />
 ```
+
+> **Livewire v4 note:** Use `tall.icon-picker` (dot notation). Livewire v4 dropped support for `::` as a namespace separator in component tags. The `<x-tall::icon-picker>` Blade wrapper is unaffected and works with both versions.
 
 > **Under the Hood:** When an icon is selected, the Livewire component dispatches an `icon-picked` event mapped to the `$parentModel` property, ensuring reactive synchronisation with the parent component.
 

@@ -12,7 +12,7 @@
         </label>
     @endif
 
-    <livewire:tall::icon-picker
+    <livewire:tall.icon-picker
         :parent-model="$resolvedModel"
         {{ $attributes->whereStartsWith('wire:model') }}
     />
