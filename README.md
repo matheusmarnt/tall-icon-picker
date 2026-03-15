@@ -23,7 +23,7 @@ Unlike traditional pickers that load massive arrays into memory, **TALL Icon Pic
 |---|---|
 | **Optimized I/O (`IconDiscoveryService`)** | SVG file scanning runs in isolation, reading artifacts directly from the `vendor` directory only when requested. |
 | **Lazy Loading & Pagination** | Thousands of icons are processed on demand and paginated in the backend, keeping the browser DOM and Livewire payload extremely lightweight. |
-| **Dual UI Adapter** | Automatically detects whether TallStackUI is installed and renders the appropriate components. Without TallStackUI, native Alpine.js/Tailwind components with smooth animations and modern design are activated. |
+| **Dual UI Adapter** | Automatically detects whether TallStackUI is installed and routes to the appropriate Livewire view. Each adapter has a fully self-contained view: `icon-picker-tallstackui.blade.php` for TallStackUI and `icon-picker.blade.php` for the native Alpine.js/Tailwind experience. |
 | **Extensibility (OCP)** | Open for extension via the config file (`config/tall-icon-picker.php`), allowing new icon libraries to be injected without modifying the package core. |
 | **Batteries-Included** | Pre-configured for 15+ widely-used collections (Lucide, Phosphor, FontAwesome, Heroicons, etc.). |
 | **i18n** | Native multi-language support. Ships with `en` and `pt_BR` — extensible by publishing the translation files. |
@@ -237,7 +237,14 @@ Publish the views to override the picker layout or empty states:
 php artisan vendor:publish --tag="tall-icon-picker-views"
 ```
 
-Views are placed in `resources/views/vendor/tall`. The UI adapter components (`ui/drawer`, `ui/button`, `ui/select`, `ui/input`) are also published and can be customised individually.
+Views are placed in `resources/views/vendor/tall`. The two Livewire views can be customised independently:
+
+| File | Description |
+|---|---|
+| `livewire/icon-picker.blade.php` | Native Alpine.js/Tailwind view |
+| `livewire/icon-picker-tallstackui.blade.php` | TallStackUI (`x-ts-*`) view |
+
+The shared UI adapter components (`ui/drawer`, `ui/button`, `ui/select`, `ui/input`) are used by the TallStackUI path and can also be customised individually.
 
 ### Publishing only the translations
 

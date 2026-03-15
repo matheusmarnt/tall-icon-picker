@@ -130,8 +130,12 @@ class IconPicker extends Component
 
     public function render(): View
     {
+        $ui = Config::get('tall-icon-picker.ui', 'native');
+
         /** @var view-string $view */
-        $view = 'tall::livewire.icon-picker';
+        $view = $ui === 'tallstackui'
+            ? 'tall::livewire.icon-picker-tallstackui'
+            : 'tall::livewire.icon-picker';
 
         return view($view);
     }
