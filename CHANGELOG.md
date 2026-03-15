@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.2] - 2026-03-15
+
+### Fixed
+
+- **CI — `getClass()` test failure on Livewire v4** — `app('livewire')->getClass()` is not a method on `Livewire\LivewireManager` in v4; the method lives on `Livewire\Mechanisms\ComponentRegistry`. Updated the two component-registration assertions in `TallIconPickerServiceProviderTest` to call `app(ComponentRegistry::class)->getClass()` directly.
+
 ## [2.1.1] - 2026-03-15
 
 ### Fixed
@@ -179,7 +185,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - TallStackUI support (`x-ts-slide`, `x-ts-button`)
 - GitHub Actions: CI, code style, automatic CHANGELOG
 
-[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v2.1.1...HEAD
+[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v2.1.2...HEAD
+[2.1.2]: https://github.com/matheusmarnt/tall-icon-picker/compare/v2.1.1...v2.1.2
 [2.1.1]: https://github.com/matheusmarnt/tall-icon-picker/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.5.0...v2.0.0

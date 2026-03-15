@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Livewire\Mechanisms\ComponentRegistry;
 use Matheusmarnt\TallIconPicker\Livewire\IconPicker;
 use Matheusmarnt\TallIconPicker\TallIconPickerServiceProvider;
 
@@ -16,11 +17,11 @@ function resolveAdapter(string $uiConfig): string
 }
 
 it('registers the livewire component under dot notation', function () {
-    expect(app('livewire')->getClass('tall.icon-picker'))->toBe(IconPicker::class);
+    expect(app(ComponentRegistry::class)->getClass('tall.icon-picker'))->toBe(IconPicker::class);
 });
 
 it('registers the livewire component under double-colon notation for Livewire v3 compatibility', function () {
-    expect(app('livewire')->getClass('tall::icon-picker'))->toBe(IconPicker::class);
+    expect(app(ComponentRegistry::class)->getClass('tall::icon-picker'))->toBe(IconPicker::class);
 });
 
 it('always resolves to tallstackui regardless of config — native mode is suspended', function () {
