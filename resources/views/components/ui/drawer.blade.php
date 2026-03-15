@@ -17,7 +17,15 @@
     </x-ts-slide>
 @else
     <div x-data="{ open: $wire.entangle('{{ $property }}') }" x-cloak @keydown.escape.window="open = false" class="relative z-50">
-        <div x-show="open" x-transition.opacity class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm dark:bg-zinc-900/80"></div>
+        <div x-show="open"
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-150"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             @click="open = false"
+             class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm dark:bg-zinc-900/80"></div>
 
         <div class="fixed inset-0 overflow-hidden">
             <div class="absolute inset-0 overflow-hidden">
@@ -29,7 +37,6 @@
                          x-transition:leave="transform transition ease-in-out duration-200"
                          x-transition:leave-start="translate-x-0"
                          x-transition:leave-end="translate-x-full"
-                         @click.outside="open = false"
                          class="pointer-events-auto w-screen {{ $maxWidth }}">
 
                         <div class="flex h-full flex-col bg-white shadow-xl dark:bg-zinc-900">
