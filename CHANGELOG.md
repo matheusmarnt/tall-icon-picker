@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.1] - 2026-03-15
+
+### Fixed
+
+- **CRITICAL — `x-dynamic-component` crash on icons whose names begin with a digit** (e.g. `google-10k`, `phosphor-360`) — Blade's `ComponentTagCompiler` rejects component names that start with a digit, throwing `Unable to locate a class or view for component [google-10k]` as soon as the icon grid was rendered with such an icon. Fixed in both the TallStackUI view (`icon-picker-tallstackui.blade.php`) and the native view (`icon-picker.blade.php`) by replacing `<x-dynamic-component :component="$icon">` with `@php try { echo svg($icon, 'w-5 h-5')->toHtml(); } catch (\Throwable) {} @endphp`. The `svg()` helper from `blade-ui-kit/blade-icons` resolves icons from its own registry, bypassing the Blade component resolver entirely, and the try/catch silently skips any icon that cannot be rendered.
+
 ## [2.1.0] - 2026-03-15
 
 ### Changed
@@ -173,7 +179,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - TallStackUI support (`x-ts-slide`, `x-ts-button`)
 - GitHub Actions: CI, code style, automatic CHANGELOG
 
-[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v2.1.1...HEAD
+[2.1.1]: https://github.com/matheusmarnt/tall-icon-picker/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.5.0...v2.0.0
 [1.5.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.3...v1.5.0

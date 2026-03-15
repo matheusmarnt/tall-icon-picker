@@ -233,7 +233,7 @@
                             'text-violet-600 dark:text-violet-400'  => $value === $icon,
                             'text-zinc-500 group-hover:text-violet-600 dark:text-zinc-400 dark:group-hover:text-violet-400' => $value !== $icon,
                         ])>
-                            <x-dynamic-component :component="$icon" class="w-5 h-5"/>
+                            @php try { echo svg($icon, 'w-5 h-5')->toHtml(); } catch (\Throwable) {} @endphp
                         </span>
 
                         {{-- Icon name — visible on sm+ --}}

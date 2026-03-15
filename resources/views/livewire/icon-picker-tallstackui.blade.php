@@ -163,7 +163,7 @@
 
                         {{-- Icon SVG --}}
                         <span class="flex h-6 w-6 items-center justify-center text-gray-500 transition-colors duration-150 group-hover:text-indigo-600 dark:text-gray-400 dark:group-hover:text-indigo-400">
-                            <x-dynamic-component :component="$icon" class="w-5 h-5"/>
+                            @php try { echo svg($icon, 'w-5 h-5')->toHtml(); } catch (\Throwable) {} @endphp
                         </span>
 
                         {{-- Icon name (sm+ only) --}}
