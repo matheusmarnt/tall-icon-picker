@@ -57,20 +57,15 @@
             @endif
         </div>
 
-        <button
+        <x-tall::ui.button
             wire:click="$set('open', true)"
             type="button"
-            class="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-transparent
-                   bg-primary-500 px-4 py-2 text-sm font-medium text-white shadow-sm transition-all duration-200
-                   hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-1
-                   active:scale-95 disabled:pointer-events-none disabled:opacity-50
-                   dark:focus:ring-offset-zinc-900 sm:w-auto"
+            color="primary"
+            class="w-full justify-center sm:w-auto"
+            icon="magnifying-glass"
         >
-            <svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 15.803a7.5 7.5 0 0010.607 0z"/>
-            </svg>
             {{ __('tall-icon-picker::icon-picker.choose') }}
-        </button>
+        </x-tall::ui.button>
     </div>
 
     {{-- ── Drawer ───────────────────────────────────────────────── --}}
@@ -83,149 +78,23 @@
 
             {{-- Filters & Search --}}
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                <x-tall::ui.select
+                    wire:model.live="libraries"
+                    :label="__('tall-icon-picker::icon-picker.icon_libraries')"
+                    :hint="__('tall-icon-picker::icon-picker.libraries_hint')"
+                    :options="$this->availableLibraries"
+                    select="label:name|value:id"
+                    :multiple="true"
+                    :searchable="true"
+                />
 
-                {{-- Library multi-select (inline Alpine — v1.3.0 binding pattern) --}}
-                @php
-                    $libraryOptions = $this->availableLibraries;
-                    $libraryJson = collect($libraryOptions)
-                        ->map(fn ($opt) => ['label' => $opt['name'], 'value' => $opt['id']])
-                        ->values()
-                        ->toJson(JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
-                @endphp
-
-                <div class="flex flex-col gap-1"
-                     data-options="{{ $libraryJson }}"
-                     data-selected-text="{{ __('tall-icon-picker::icon-picker.selected') }}"
-                     data-placeholder-text="{{ __('tall-icon-picker::icon-picker.select_placeholder') }}"
-                     x-data="{
-                         open: false,
-                         search: '',
-                         options: JSON.parse($el.dataset.options),
-                         selectedText: $el.dataset.selectedText,
-                         placeholderText: $el.dataset.placeholderText,
-                         get selected() { return $wire.libraries || []; },
-                         get filtered() {
-                             if (!this.search) return this.options;
-                             const q = this.search.toLowerCase();
-                             return this.options.filter(o => o.label.toLowerCase().includes(q));
-                         },
-                         toggle(val) {
-                             const updated = this.selected.includes(val)
-                                 ? this.selected.filter(v => v !== val)
-                                 : [...this.selected, val];
-                             $wire.set('libraries', updated);
-                         },
-                         isSelected(val) { return this.selected.includes(val); },
-                         get triggerText() {
-                             if (this.selected.length > 0) {
-                                 return this.selected.length + ' ' + this.selectedText;
-                             }
-                             return this.placeholderText;
-                         }
-                     }"
-                     @click.away="open = false"
-                     @keydown.escape="open = false"
-                >
-                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        {{ __('tall-icon-picker::icon-picker.icon_libraries') }}
-                    </label>
-
-                    <div class="relative">
-                        <button
-                            type="button"
-                            @click="open = !open"
-                            class="flex w-full items-center justify-between rounded-lg border border-gray-300
-                                   bg-white px-3 py-2.5 text-sm shadow-sm transition-all
-                                   focus:outline-none focus:ring-2 focus:ring-primary-500
-                                   dark:border-zinc-700 dark:bg-zinc-800/80 dark:text-gray-200"
-                        >
-                            <span class="truncate text-gray-700 dark:text-gray-200" x-text="triggerText"></span>
-                            <svg class="h-4 w-4 shrink-0 text-gray-400" fill="none" viewBox="0 0 24 24"
-                                 stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4m0 6l-4 4-4-4"/>
-                            </svg>
-                        </button>
-
-                        <div
-                            x-show="open"
-                            x-transition.opacity
-                            x-cloak
-                            class="absolute z-50 mt-1 w-full overflow-hidden rounded-lg border border-gray-200
-                                   bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-800"
-                        >
-                            <div class="border-b border-gray-100 p-2 dark:border-zinc-700">
-                                <input
-                                    x-model="search"
-                                    type="text"
-                                    placeholder="{{ __('tall-icon-picker::icon-picker.search_placeholder') }}"
-                                    class="w-full rounded-md border border-gray-300 bg-gray-50 px-3 py-1.5 text-sm
-                                           focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500
-                                           dark:border-zinc-600 dark:bg-zinc-900 dark:text-gray-200"
-                                />
-                            </div>
-
-                            <div class="max-h-60 overflow-y-auto p-1">
-                                <template x-for="option in filtered" :key="option.value">
-                                    <button
-                                        type="button"
-                                        @click="toggle(option.value)"
-                                        :class="isSelected(option.value)
-                                            ? 'bg-primary-50 text-primary-600 dark:bg-primary-900/20 dark:text-primary-400'
-                                            : 'text-gray-700 hover:bg-gray-50 dark:text-zinc-300 dark:hover:bg-zinc-700'"
-                                        class="flex w-full items-center gap-2 rounded-md px-3 py-2
-                                               text-left text-sm transition-colors"
-                                    >
-                                        <span class="flex h-4 w-4 shrink-0 items-center justify-center">
-                                            <template x-if="isSelected(option.value)">
-                                                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24"
-                                                     stroke="currentColor" stroke-width="3">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-                                                </svg>
-                                            </template>
-                                        </span>
-                                        <span x-text="option.label"></span>
-                                    </button>
-                                </template>
-
-                                <template x-if="filtered.length === 0">
-                                    <p class="px-3 py-2 text-sm text-gray-400 dark:text-zinc-500">
-                                        {{ __('tall-icon-picker::icon-picker.no_icons_found') }}
-                                    </p>
-                                </template>
-                            </div>
-                        </div>
-                    </div>
-
-                    <span class="text-xs text-gray-500 dark:text-zinc-400">
-                        {{ __('tall-icon-picker::icon-picker.libraries_hint') }}
-                    </span>
-                </div>
-
-                {{-- Search input --}}
-                <div class="flex flex-col gap-1">
-                    <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        {{ __('tall-icon-picker::icon-picker.search_label') }}
-                    </label>
-                    <div class="relative">
-                        <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-gray-400 dark:text-zinc-500">
-                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 15.803a7.5 7.5 0 0010.607 0z"/>
-                            </svg>
-                        </span>
-                        <input
-                            type="text"
-                            wire:model.live.debounce.300ms="search"
-                            placeholder="{{ __('tall-icon-picker::icon-picker.search_placeholder') }}"
-                            class="w-full rounded-lg border py-2.5 pl-10 pr-4 text-sm shadow-sm transition-all duration-200
-                                   focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500
-                                   border-gray-300 bg-white text-gray-900 placeholder-gray-400
-                                   dark:border-zinc-700 dark:bg-zinc-800/80 dark:text-gray-200 dark:placeholder-zinc-500"
-                        />
-                    </div>
-                    <span class="text-xs text-gray-500 dark:text-zinc-400">
-                        {{ __('tall-icon-picker::icon-picker.search_hint') }}
-                    </span>
-                </div>
+                <x-tall::ui.input
+                    wire:model.live.debounce.300ms="search"
+                    :label="__('tall-icon-picker::icon-picker.search_label')"
+                    :hint="__('tall-icon-picker::icon-picker.search_hint')"
+                    :placeholder="__('tall-icon-picker::icon-picker.search_placeholder')"
+                    icon="magnifying-glass"
+                />
             </div>
 
             {{-- Stats bar --}}
@@ -330,17 +199,15 @@
                         </p>
 
                         @if ($search || count($libraries) > 1)
-                            <button
+                            <x-tall::ui.button
                                 wire:click="resetFilters"
-                                type="button"
-                                class="mt-4 inline-flex items-center justify-center gap-1.5 rounded-lg border border-transparent
-                                       px-3 py-1.5 text-xs font-medium text-gray-600 transition-all duration-200
-                                       hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2
-                                       focus:ring-gray-200 focus:ring-offset-1 active:scale-95
-                                       dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
+                                color="secondary"
+                                variant="flat"
+                                class="mt-4"
+                                :sm="true"
                             >
                                 {{ __('tall-icon-picker::icon-picker.clear_filters') }}
-                            </button>
+                            </x-tall::ui.button>
                         @endif
                     </div>
                 @endforelse
@@ -438,17 +305,9 @@
 
         <x-slot:footer>
             <div class="flex w-full justify-end">
-                <button
-                    wire:click="$set('open', false)"
-                    type="button"
-                    class="inline-flex items-center justify-center gap-1.5 rounded-lg border border-transparent
-                           px-4 py-2 text-sm font-medium text-gray-600 transition-all duration-200
-                           hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:ring-2
-                           focus:ring-gray-200 focus:ring-offset-1 active:scale-95
-                           dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200"
-                >
+                <x-tall::ui.button wire:click="$set('open', false)" color="secondary" variant="flat">
                     {{ __('tall-icon-picker::icon-picker.cancel') }}
-                </button>
+                </x-tall::ui.button>
             </div>
         </x-slot:footer>
 

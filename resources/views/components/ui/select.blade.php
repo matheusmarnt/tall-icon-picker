@@ -53,6 +53,8 @@
     {{-- (htmlspecialchars), making them safe in any HTML attribute quote style.         --}}
     {{-- The x-data string contains zero Blade-interpolated JSON or locale content,     --}}
     {{-- so it is safe in both single-quoted and double-quoted HTML attributes.          --}}
+    {{-- Alpine logic follows the v1.3.0 pattern: direct $wire.property reactive getter --}}
+    {{-- and explicit $wire.set() writes — no entangle, no initialization-order risk.   --}}
     <div class="flex flex-col gap-1"
          data-options="{{ $alpineOptions }}"
          data-selected-text="{{ __('tall-icon-picker::icon-picker.selected') }}"
@@ -61,45 +63,33 @@
             open: false,
             search: '',
             options: JSON.parse($el.dataset.options),
-            get selected() {
-                const val = $wire.{{ $wireProperty }};
-                return {{ $multiple ? 'true' : 'false' }}
-                    ? (Array.isArray(val) ? val : (val ? [val] : []))
-                    : (val ?? null);
-            },
+            get selected() { return $wire.{{ $wireProperty }} || []; },
             selectedText: $el.dataset.selectedText,
             placeholderText: $el.dataset.placeholderText,
             get filtered() {
-                return this.search === ''
-                    ? this.options
-                    : this.options.filter(o => o.label.toLowerCase().includes(this.search.toLowerCase()));
+                if (!this.search) return this.options;
+                const q = this.search.toLowerCase();
+                return this.options.filter(o => o.label.toLowerCase().includes(q));
             },
-            isSelected(val) {
-                return Array.isArray(this.selected) ? this.selected.includes(val) : this.selected === val;
-            },
+            isSelected(val) { return this.selected.includes(val); },
             toggle(val) {
-                if ({{ $multiple ? 'true' : 'false' }}) {
-                    const current = Array.isArray(this.selected) ? this.selected : [];
-                    const updated = current.includes(val)
-                        ? current.filter(v => v !== val)
-                        : [...current, val];
-                    $wire.set('{{ $wireProperty }}', updated);
-                } else {
-                    $wire.set('{{ $wireProperty }}', val);
-                    this.open = false;
-                }
+                const updated = this.selected.includes(val)
+                    ? this.selected.filter(v => v !== val)
+                    : [...this.selected, val];
+                $wire.set('{{ $wireProperty }}', updated);
+            },
+            remove(val) {
+                $wire.set('{{ $wireProperty }}', this.selected.filter(v => v !== val));
             },
             get triggerText() {
-                if (Array.isArray(this.selected) && this.selected.length > 0) {
+                if (this.selected.length > 0) {
                     return this.selected.length + ' ' + this.selectedText;
-                }
-                if (!Array.isArray(this.selected) && this.selected) {
-                    const opt = this.options.find(o => o.value === this.selected);
-                    return opt ? opt.label : this.placeholderText;
                 }
                 return this.placeholderText;
             }
          }"
+         @click.away="open = false"
+         @keydown.escape="open = false"
     >
         @if ($label)
             <label class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $label }}</label>
@@ -109,7 +99,6 @@
             <button
                 type="button"
                 @click="open = !open"
-                @click.outside="open = false"
                 class="flex w-full items-center justify-between rounded-lg border border-gray-300
                        bg-white px-3 py-2.5 text-sm shadow-sm transition-all
                        focus:outline-none focus:ring-2 focus:ring-primary-500
