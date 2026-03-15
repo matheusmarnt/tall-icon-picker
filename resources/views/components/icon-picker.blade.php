@@ -11,8 +11,8 @@
     @if ($label)
         <label @class([
             'block text-sm font-medium transition-colors duration-150',
-            'text-red-600 dark:text-red-400'   => $hasError,
-            'text-gray-700 dark:text-gray-300' => ! $hasError,
+            'text-red-600 dark:text-red-400'     => $hasError,
+            'text-zinc-700 dark:text-zinc-300' => ! $hasError,
         ])>
             {{ $label }}
         </label>
@@ -23,9 +23,9 @@
         'ring-2 ring-red-500/40 ring-offset-0' => $hasError,
     ])>
         <livewire:tall.icon-picker
-            :parent-model="$resolvedModel"
-            :placeholder="$placeholder ?? ''"
-            {{ $attributes->whereStartsWith('wire:model') }}
+                :parent-model="$resolvedModel"
+                :placeholder="$placeholder ?? ''"
+                {{ $attributes->whereStartsWith('wire:model') }}
         />
     </div>
 
@@ -39,7 +39,7 @@
             {{ $errorMessage }}
         </div>
     @elseif ($hint)
-        <p class="flex items-center gap-1.5 text-sm text-gray-400 dark:text-zinc-500">
+        <p class="flex items-center gap-1.5 text-sm text-zinc-400 dark:text-zinc-500">
             <svg aria-hidden="true" class="h-3.5 w-3.5 shrink-0" fill="none"
                  viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round"

@@ -1,7 +1,7 @@
 <div
-    wire:cloak
-    x-data
-    x-on:icon-picked.window="
+        wire:cloak
+        x-data
+        x-on:icon-picked.window="
         if ($event.detail.property !== @js($parentModel)) return;
         const self = $el.closest('[wire\\:id]');
         const parent = self?.parentElement?.closest('[wire\\:id]');
@@ -15,276 +15,328 @@
 >
 
     {{-- ── Trigger row ─────────────────────────────────────────── --}}
-    <div class="flex flex-col gap-1 sm:flex-row sm:items-center">
+    <div class="flex items-center gap-2">
 
-        <div class="group relative flex flex-1 items-center gap-3 rounded-lg border border-gray-300 bg-white
-                    px-3 py-2.5 shadow-sm transition-all
-                    focus-within:border-primary-500 focus-within:ring-1 focus-within:ring-primary-500
-                    dark:border-zinc-700 dark:bg-zinc-800/80 dark:focus-within:border-primary-500">
-
+        {{-- Field — clicking anywhere on it opens the picker --}}
+        <button
+                wire:click="$set('open', true)"
+                type="button"
+                class="group flex flex-1 items-center gap-2.5 rounded-xl border border-zinc-200 bg-white
+                       px-3.5 py-2.5 text-sm transition-all duration-200
+                       hover:border-zinc-300 hover:bg-zinc-50
+                       focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-500/20
+                       dark:border-zinc-700 dark:bg-zinc-900
+                       dark:hover:border-zinc-600 dark:hover:bg-zinc-800/80"
+        >
             @if ($value)
-                <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-md
-                            bg-gray-50 text-gray-700 shadow-sm dark:bg-zinc-700 dark:text-gray-200">
+                <span class="flex h-5 w-5 shrink-0 items-center justify-center text-violet-600 dark:text-violet-400">
                     {!! $this->selectedIconSvg !!}
-                </div>
-                <span class="flex-1 truncate text-sm font-medium text-gray-700 dark:text-gray-200">
+                </span>
+                <span class="flex-1 truncate text-left font-mono text-xs tracking-tight text-zinc-600 dark:text-zinc-300">
                     {{ $value }}
                 </span>
-
-                <button
-                    wire:click.stop="clearIcon"
-                    type="button"
-                    title="{{ __('tall-icon-picker::icon-picker.remove_icon') }}"
-                    class="ml-auto rounded-md p-1 text-gray-400 transition-colors
-                           hover:bg-red-50 hover:text-red-500
-                           focus:outline-none focus:ring-2 focus:ring-red-500/50
-                           dark:text-zinc-500 dark:hover:bg-red-500/10 dark:hover:text-red-400"
-                >
-                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                <span class="ml-auto flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-violet-100 dark:bg-violet-900/40">
+                    <svg class="h-2.5 w-2.5 text-violet-600 dark:text-violet-400" fill="none"
+                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="3.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                     </svg>
-                </button>
+                </span>
             @else
-                <div class="flex h-6 w-6 shrink-0 items-center justify-center text-gray-400 dark:text-zinc-500">
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                <span class="flex h-5 w-5 shrink-0 items-center justify-center text-zinc-300 dark:text-zinc-600">
+                    <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                         <path stroke-linecap="round" stroke-linejoin="round"
-                              d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/>
+                              d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zm0 9.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zm9.75-9.75A2.25 2.25 0 0115.75 3.75H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zm0 9.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"/>
                     </svg>
-                </div>
-                <span class="flex-1 text-sm text-gray-400 dark:text-zinc-500">
+                </span>
+                <span class="flex-1 text-left text-zinc-400 dark:text-zinc-500">
                     {{ $placeholder ?: __('tall-icon-picker::icon-picker.no_icon_selected') }}
                 </span>
+                <svg class="ml-auto h-3.5 w-3.5 shrink-0 text-zinc-300 dark:text-zinc-600 group-hover:text-zinc-400"
+                     fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0a7.5 7.5 0 10-10.607 0 7.5 7.5 0 0010.607 0z"/>
+                </svg>
             @endif
-        </div>
+        </button>
 
-        <x-tall::ui.button
-            wire:click="$set('open', true)"
-            type="button"
-            color="primary"
-            class="w-full justify-center sm:w-auto"
-            icon="magnifying-glass"
+        {{-- Clear button — only shown when a value is set --}}
+        @if ($value)
+            <button
+                    wire:click="clearIcon"
+                    type="button"
+                    title="{{ __('tall-icon-picker::icon-picker.remove_icon') }}"
+                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-zinc-200
+                           text-zinc-400 transition-all duration-150
+                           hover:border-red-200 hover:bg-red-50 hover:text-red-500
+                           focus:outline-none focus:ring-2 focus:ring-red-500/30
+                           dark:border-zinc-700 dark:text-zinc-500
+                           dark:hover:border-red-800/50 dark:hover:bg-red-900/20 dark:hover:text-red-400"
+            >
+                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        @endif
+
+        {{-- Browse button --}}
+        <button
+                wire:click="$set('open', true)"
+                type="button"
+                class="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-violet-200 bg-violet-50
+                       px-3.5 py-2.5 text-sm font-medium text-violet-700 transition-all duration-150
+                       hover:border-violet-300 hover:bg-violet-100
+                       focus:outline-none focus:ring-2 focus:ring-violet-500/30 active:scale-[0.97]
+                       dark:border-violet-700/40 dark:bg-violet-900/20 dark:text-violet-300
+                       dark:hover:border-violet-600/50 dark:hover:bg-violet-900/30"
         >
-            {{ __('tall-icon-picker::icon-picker.choose') }}
-        </x-tall::ui.button>
+            <svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0a7.5 7.5 0 10-10.607 0 7.5 7.5 0 0010.607 0z"/>
+            </svg>
+            <span class="hidden sm:inline">{{ __('tall-icon-picker::icon-picker.choose') }}</span>
+        </button>
     </div>
 
     {{-- ── Drawer ───────────────────────────────────────────────── --}}
     <x-tall::ui.drawer
-        property="open"
-        :title="__('tall-icon-picker::icon-picker.choose_icon')"
-        size="5xl"
+            property="open"
+            :title="__('tall-icon-picker::icon-picker.choose_icon')"
+            size="6xl"
     >
-        <div class="flex flex-col gap-6">
+        <div class="flex flex-col gap-4">
 
-            {{-- Filters & Search --}}
-            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <x-tall::ui.select
-                    wire:model.live="libraries"
-                    :label="__('tall-icon-picker::icon-picker.icon_libraries')"
-                    :hint="__('tall-icon-picker::icon-picker.libraries_hint')"
-                    :options="$this->availableLibraries"
-                    select="label:name|value:id"
-                    :multiple="true"
-                    :searchable="true"
-                />
+            {{-- ── Filter panel ────────────────────────────────── --}}
+            <div class="space-y-3 rounded-xl bg-zinc-50/80 p-3.5 ring-1 ring-zinc-100 dark:bg-zinc-800/30 dark:ring-zinc-700/50">
 
-                <x-tall::ui.input
-                    wire:model.live.debounce.300ms="search"
-                    :label="__('tall-icon-picker::icon-picker.search_label')"
-                    :hint="__('tall-icon-picker::icon-picker.search_hint')"
-                    :placeholder="__('tall-icon-picker::icon-picker.search_placeholder')"
-                    icon="magnifying-glass"
-                />
-            </div>
-
-            {{-- Stats bar --}}
-            <div class="flex items-center justify-between rounded-lg bg-gray-50 px-4 py-2
-                        text-xs font-medium text-gray-500
-                        dark:bg-zinc-800/50 dark:text-zinc-400">
-                <div class="flex items-center gap-2">
-                    <span wire:loading.remove wire:target="search, libraries, page">
-                        {{ __('tall-icon-picker::icon-picker.icons_count', ['count' => number_format($this->icons()->total())]) }}
-                    </span>
-                    <span wire:loading wire:target="search, libraries, page"
-                          class="flex items-center gap-2 text-primary-500">
-                        <svg class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24"
-                             stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                {{-- Search input --}}
+                <div class="relative flex items-center">
+                    <span class="pointer-events-none absolute left-3 text-zinc-400 dark:text-zinc-500">
+                        <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0a7.5 7.5 0 10-10.607 0 7.5 7.5 0 0010.607 0z"/>
                         </svg>
-                        {{ __('tall-icon-picker::icon-picker.loading') }}
                     </span>
+                    <input
+                            type="text"
+                            wire:model.live.debounce.300ms="search"
+                            placeholder="{{ __('tall-icon-picker::icon-picker.search_placeholder') }}"
+                            class="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-8 pr-4 text-sm
+                                   text-zinc-900 placeholder-zinc-400 transition-all
+                                   dark:border-zinc-700 dark:bg-zinc-800/50 dark:text-zinc-100 dark:placeholder-zinc-500
+                                   focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-500/20 dark:focus:border-violet-500"
+                    />
                 </div>
 
+                {{-- Library toggle chips ──────────────────────── --}}
+                {{-- Alpine reads available libs from data-libs; selection syncs via $wire.libraries --}}
+                @php
+                    $libJson = collect($this->availableLibraries)
+                        ->map(fn ($l) => ['id' => $l['id'], 'name' => $l['name']])
+                        ->values()
+                        ->toJson(JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT);
+                @endphp
+
+                <div
+                        data-libs="{{ $libJson }}"
+                        x-data="{
+                            libs: JSON.parse($el.dataset.libs),
+                            get selected() { return $wire.libraries || []; },
+                            isOn(id) { return this.selected.includes(id); },
+                            toggle(id) {
+                                const cur = this.selected;
+                                const next = cur.includes(id) ? cur.filter(v => v !== id) : [...cur, id];
+                                if (next.length > 0) $wire.set('libraries', next);
+                            }
+                        }"
+                >
+                    <p class="mb-1.5 text-xs font-medium text-zinc-400 dark:text-zinc-500">
+                        {{ __('tall-icon-picker::icon-picker.icon_libraries') }}
+                    </p>
+
+                    <div class="flex flex-wrap gap-1.5">
+                        <template x-for="lib in libs" :key="lib.id">
+                            <button
+                                    type="button"
+                                    @click="toggle(lib.id)"
+                                    :class="isOn(lib.id)
+                                        ? 'border-violet-200 bg-violet-50 text-violet-700 dark:border-violet-700/40 dark:bg-violet-900/20 dark:text-violet-300'
+                                        : 'border-zinc-200 bg-white text-zinc-500 hover:border-zinc-300 hover:text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800/60 dark:text-zinc-400 dark:hover:border-zinc-600 dark:hover:text-zinc-300'"
+                                    class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-violet-500/30"
+                            >
+                                <span class="h-1.5 w-1.5 rounded-full transition-colors"
+                                      :class="isOn(lib.id) ? 'bg-violet-500' : 'bg-zinc-300 dark:bg-zinc-600'"></span>
+                                <span x-text="lib.name"></span>
+                            </button>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            {{-- ── Stats bar ───────────────────────────────────── --}}
+            <div class="flex items-center justify-between font-mono text-xs tabular-nums text-zinc-400 dark:text-zinc-500">
+                <span wire:loading.remove wire:target="search, libraries, page">
+                    <span class="text-zinc-500 dark:text-zinc-400">{{ number_format($this->icons()->total()) }}</span>
+                    <span class="mx-1 opacity-40">icons</span>
+                    @if ($search)
+                        <span class="mx-1 opacity-30">·</span>
+                        <span class="text-violet-500 dark:text-violet-400">{{ $search }}</span>
+                    @endif
+                </span>
+                <span wire:loading wire:target="search, libraries, page" class="animate-pulse">
+                    {{ __('tall-icon-picker::icon-picker.loading') }}
+                </span>
+
                 @if ($this->icons()->total() > 0)
-                    <span>
-                        {{ __('tall-icon-picker::icon-picker.page_info', ['current' => $page, 'last' => $this->icons()->lastPage()]) }}
+                    <span wire:loading.remove wire:target="search, libraries, page">
+                        {{ $page }}&thinsp;/&thinsp;{{ $this->icons()->lastPage() }}
                     </span>
                 @endif
             </div>
 
-            {{-- Loading skeleton --}}
+            {{-- ── Loading skeleton ────────────────────────────── --}}
             <div
-                wire:loading.flex
-                wire:target="search, libraries, page"
-                class="grid grid-cols-4 gap-3 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10"
+                    wire:loading.flex wire:target="search, libraries, page"
+                    class="grid grid-cols-5 gap-2 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10"
             >
-                @foreach (range(1, 40) as $_)
-                    <div class="aspect-square animate-pulse rounded-xl bg-gray-200 dark:bg-zinc-800"></div>
+                @foreach (range(1, 60) as $_)
+                    <div class="aspect-square animate-pulse rounded-xl bg-zinc-100 dark:bg-zinc-800"></div>
                 @endforeach
             </div>
 
-            {{-- Icon grid --}}
+            {{-- ── Icon grid ───────────────────────────────────── --}}
             <div
-                wire:loading.remove
-                wire:target="search, libraries, page"
-                class="grid grid-cols-4 gap-3 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10"
+                    wire:loading.remove wire:target="search, libraries, page"
+                    class="grid grid-cols-5 gap-2 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10"
             >
                 @forelse ($this->icons() as $icon)
                     <button
-                        wire:key="icon-{{ $icon }}"
-                        wire:click="selectIcon('{{ $icon }}')"
-                        type="button"
-                        title="{{ Str::after($icon, '-') }}"
-                        @class([
-                            'group relative flex aspect-square flex-col items-center justify-center gap-2 rounded-xl border p-2 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-zinc-900',
-                            'border-primary-500 bg-primary-50 ring-1 ring-primary-500 dark:bg-primary-900/20 dark:border-primary-500' => $value === $icon,
-                            'border-gray-200 bg-white hover:-translate-y-1 hover:border-primary-300 hover:bg-gray-50 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-800/80 dark:hover:border-primary-600 dark:hover:bg-zinc-800' => $value !== $icon,
-                        ])
+                            wire:key="icon-{{ $icon }}"
+                            wire:click="selectIcon('{{ $icon }}')"
+                            type="button"
+                            title="{{ Str::after($icon, '-') }}"
+                            @class([
+                                'group relative flex aspect-square flex-col items-center justify-center gap-1 rounded-xl border p-2 transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-violet-500/40',
+                                'border-violet-400/70 bg-violet-50 ring-2 ring-violet-500/30 dark:border-violet-600/50 dark:bg-violet-900/20' => $value === $icon,
+                                'border-zinc-100 bg-white hover:-translate-y-0.5 hover:border-violet-300/70 hover:bg-violet-50/60 hover:shadow-sm dark:border-zinc-800 dark:bg-zinc-800/40 dark:hover:border-violet-700/50 dark:hover:bg-violet-900/10' => $value !== $icon,
+                            ])
                     >
                         {{-- Selected badge --}}
                         @if ($value === $icon)
-                            <span class="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center
-                                         rounded-full bg-primary-500 text-white shadow-sm ring-2 ring-white dark:ring-zinc-900">
-                                <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24"
-                                     stroke="currentColor" stroke-width="3">
+                            <span class="absolute right-0.5 top-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-violet-500">
+                                <svg class="h-2 w-2 text-white" fill="none" viewBox="0 0 24 24"
+                                     stroke="currentColor" stroke-width="4">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
                                 </svg>
                             </span>
                         @endif
 
                         {{-- Icon SVG --}}
-                        <span class="flex items-center justify-center text-gray-700 transition-colors
-                                     group-hover:text-primary-600 dark:text-gray-300 dark:group-hover:text-primary-400">
-                            @php try { echo svg($icon, 'w-7 h-7')->toHtml(); } catch (\Throwable) {} @endphp
+                        <span @class([
+                            'flex h-5 w-5 items-center justify-center transition-colors duration-150',
+                            'text-violet-600 dark:text-violet-400'  => $value === $icon,
+                            'text-zinc-500 group-hover:text-violet-600 dark:text-zinc-400 dark:group-hover:text-violet-400' => $value !== $icon,
+                        ])>
+                            <x-dynamic-component :component="$icon" class="w-5 h-5"/>
                         </span>
 
-                        {{-- Icon name (sm+ only) --}}
-                        <span class="hidden w-full truncate text-center text-[10px] font-medium
-                                     text-gray-400 transition-colors group-hover:text-primary-500
-                                     dark:text-zinc-500 sm:block">
+                        {{-- Icon name — visible on sm+ --}}
+                        <span class="hidden w-full truncate text-center font-mono text-[8px] leading-none tracking-tight text-zinc-400 group-hover:text-violet-500 dark:text-zinc-500 sm:block">
                             {{ Str::after($icon, '-') }}
                         </span>
                     </button>
                 @empty
                     <div class="col-span-full flex flex-col items-center justify-center rounded-xl
-                                border border-dashed border-gray-300 bg-gray-50 py-16 text-center
-                                dark:border-zinc-700 dark:bg-zinc-800/30">
-                        <div class="mb-4 rounded-full bg-gray-200 p-3 dark:bg-zinc-700">
-                            <svg class="h-6 w-6 text-gray-500 dark:text-zinc-400" fill="none"
-                                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 15.803a7.5 7.5 0 0010.607 0z"/>
+                                border border-dashed border-zinc-200 py-14 text-center
+                                dark:border-zinc-700">
+                        <div class="mb-3 rounded-xl bg-zinc-100 p-3 dark:bg-zinc-800">
+                            <svg class="h-6 w-6 text-zinc-400 dark:text-zinc-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0a7.5 7.5 0 10-10.607 0 7.5 7.5 0 0010.607 0z"/>
                             </svg>
                         </div>
-                        <h3 class="mb-1 text-sm font-semibold text-gray-900 dark:text-gray-100">
+                        <p class="text-sm font-semibold text-zinc-600 dark:text-zinc-400">
                             {{ __('tall-icon-picker::icon-picker.no_icons_found') }}
-                        </h3>
-                        <p class="text-xs text-gray-500 dark:text-zinc-400">
+                        </p>
+                        <p class="mt-1 text-xs text-zinc-400 dark:text-zinc-500">
                             {{ __('tall-icon-picker::icon-picker.no_icons_hint') }}
                         </p>
 
                         @if ($search || count($libraries) > 1)
-                            <x-tall::ui.button
-                                wire:click="resetFilters"
-                                color="secondary"
-                                variant="flat"
-                                class="mt-4"
-                                :sm="true"
+                            <button
+                                    wire:click="resetFilters"
+                                    type="button"
+                                    class="mt-4 rounded-lg px-3 py-1.5 text-xs font-medium text-zinc-500
+                                           transition-colors hover:bg-zinc-100 hover:text-zinc-700
+                                           dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
                             >
                                 {{ __('tall-icon-picker::icon-picker.clear_filters') }}
-                            </x-tall::ui.button>
+                            </button>
                         @endif
                     </div>
                 @endforelse
             </div>
 
-            {{-- Pagination --}}
+            {{-- ── Pagination ──────────────────────────────────── --}}
             @if ($this->icons()->lastPage() > 1)
-                <div class="mt-4 flex flex-wrap items-center justify-center gap-1.5
-                            border-t border-gray-200 pt-6 dark:border-zinc-700 sm:gap-2">
+                @php
+                    $lastPage = $this->icons()->lastPage();
+                    $start    = max(1, $page - 2);
+                    $end      = min($lastPage, $page + 2);
+                @endphp
 
-                    <button
-                        wire:click="previousPage"
-                        type="button"
-                        @disabled($page <= 1)
-                        aria-label="{{ __('tall-icon-picker::icon-picker.previous_page') }}"
-                        class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200
-                               bg-white text-gray-500 transition-all hover:bg-gray-50 hover:text-gray-700
-                               disabled:pointer-events-none disabled:opacity-50
-                               dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400
-                               dark:hover:bg-zinc-700 dark:hover:text-gray-200"
-                    >
+                <div class="flex items-center justify-center gap-1 border-t border-zinc-100 pt-4 dark:border-zinc-800">
+
+                    {{-- Prev --}}
+                    <button wire:click="previousPage" type="button" @disabled($page <= 1)
+                            class="flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-200
+                                   text-zinc-400 transition-all hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-600
+                                   disabled:pointer-events-none disabled:opacity-40
+                                   dark:border-zinc-700 dark:text-zinc-500 dark:hover:bg-zinc-800">
                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
                         </svg>
                     </button>
 
-                    @php
-                        $lastPage = $this->icons()->lastPage();
-                        $start    = max(1, $page - 2);
-                        $end      = min($lastPage, $page + 2);
-                    @endphp
+                    {{-- Mobile compact --}}
+                    <span class="px-3 font-mono text-xs text-zinc-400 dark:text-zinc-500 sm:hidden">
+                        {{ $page }}/{{ $lastPage }}
+                    </span>
 
+                    {{-- Desktop numbered --}}
                     @if ($start > 1)
                         <button wire:click="goToPage(1)" type="button"
-                                class="hidden h-9 w-9 items-center justify-center rounded-lg border border-gray-200
-                                       bg-white text-sm font-medium text-gray-600 transition-all hover:bg-gray-50
-                                       dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400
-                                       dark:hover:bg-zinc-700 sm:flex">
+                                class="hidden h-8 w-8 items-center justify-center rounded-lg border border-zinc-200 font-mono text-xs
+                                       text-zinc-500 transition-all hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 sm:flex">
                             1
                         </button>
                         @if ($start > 2)
-                            <span class="hidden px-2 text-gray-400 sm:block">…</span>
+                            <span class="hidden px-1 font-mono text-xs text-zinc-300 dark:text-zinc-600 sm:block">…</span>
                         @endif
                     @endif
 
                     @for ($p = $start; $p <= $end; $p++)
-                        <button
-                            wire:click="goToPage({{ $p }})"
-                            type="button"
-                            @class([
-                                'flex h-9 min-w-[36px] items-center justify-center rounded-lg border text-sm font-medium transition-all px-2',
-                                'border-primary-500 bg-primary-500 text-white shadow-sm dark:bg-primary-600 dark:border-primary-600' => $p === $page,
-                                'border-gray-200 bg-white text-gray-600 hover:bg-gray-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700 dark:hover:text-gray-200' => $p !== $page,
-                            ])
+                        <button wire:click="goToPage({{ $p }})" type="button"
+                                @class([
+                                    'hidden h-8 w-8 items-center justify-center rounded-lg border font-mono text-xs transition-all sm:flex',
+                                    'border-violet-500 bg-violet-500 font-semibold text-white shadow-sm shadow-violet-500/30' => $p === $page,
+                                    'border-zinc-200 text-zinc-500 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800' => $p !== $page,
+                                ])
                         >{{ $p }}</button>
                     @endfor
 
                     @if ($end < $lastPage)
                         @if ($end < $lastPage - 1)
-                            <span class="hidden px-2 text-gray-400 sm:block">…</span>
+                            <span class="hidden px-1 font-mono text-xs text-zinc-300 dark:text-zinc-600 sm:block">…</span>
                         @endif
                         <button wire:click="goToPage({{ $lastPage }})" type="button"
-                                class="hidden h-9 w-9 items-center justify-center rounded-lg border border-gray-200
-                                       bg-white text-sm font-medium text-gray-600 transition-all hover:bg-gray-50
-                                       dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400
-                                       dark:hover:bg-zinc-700 sm:flex">
+                                class="hidden h-8 w-8 items-center justify-center rounded-lg border border-zinc-200 font-mono text-xs
+                                       text-zinc-500 transition-all hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800 sm:flex">
                             {{ $lastPage }}
                         </button>
                     @endif
 
-                    <button
-                        wire:click="nextPage"
-                        type="button"
-                        @disabled($page >= $this->icons()->lastPage())
-                        aria-label="{{ __('tall-icon-picker::icon-picker.next_page') }}"
-                        class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200
-                               bg-white text-gray-500 transition-all hover:bg-gray-50 hover:text-gray-700
-                               disabled:pointer-events-none disabled:opacity-50
-                               dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400
-                               dark:hover:bg-zinc-700 dark:hover:text-gray-200"
-                    >
+                    {{-- Next --}}
+                    <button wire:click="nextPage" type="button" @disabled($page >= $this->icons()->lastPage())
+                            class="flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-200
+                                   text-zinc-400 transition-all hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-600
+                                   disabled:pointer-events-none disabled:opacity-40
+                                   dark:border-zinc-700 dark:text-zinc-500 dark:hover:bg-zinc-800">
                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
                         </svg>
@@ -295,10 +347,18 @@
         </div>
 
         <x-slot:footer>
-            <div class="flex w-full justify-end">
-                <x-tall::ui.button wire:click="$set('open', false)" color="secondary" variant="flat">
+            <div class="flex justify-end">
+                <button
+                        wire:click="$set('open', false)"
+                        type="button"
+                        class="rounded-lg border border-zinc-200 bg-white px-3.5 py-2 text-sm font-medium text-zinc-600
+                               transition-all hover:bg-zinc-50 hover:border-zinc-300
+                               focus:outline-none focus:ring-2 focus:ring-zinc-300/50 active:scale-[0.97]
+                               dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300
+                               dark:hover:border-zinc-600 dark:hover:bg-zinc-700"
+                >
                     {{ __('tall-icon-picker::icon-picker.cancel') }}
-                </x-tall::ui.button>
+                </button>
             </div>
         </x-slot:footer>
 

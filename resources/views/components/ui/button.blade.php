@@ -1,6 +1,5 @@
 @props([
     'color'   => 'primary',
-    'variant' => 'solid',
     'sm'      => false,
     'outline' => false,
     'icon'    => null,
@@ -14,7 +13,6 @@
 @if ($adapter === 'tallstackui')
     <x-ts-button
             :color="$color"
-            :variant="$variant"
             :sm="$sm"
             :outline="$outline"
             :icon="$icon"
@@ -23,29 +21,28 @@
     >{{ $slot }}</x-ts-button>
 @else
     @php
-        $base  = 'inline-flex items-center justify-center gap-1.5 font-medium rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 dark:focus:ring-offset-zinc-900 active:scale-95 disabled:pointer-events-none disabled:opacity-50';
-        $sizeClass = $sm ? 'px-3 py-1.5 text-xs' : 'px-4 py-2 text-sm';
+        $base  = 'inline-flex items-center justify-center gap-1.5 whitespace-nowrap font-medium rounded-lg';
+        $base .= ' transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-1';
+        $base .= ' dark:focus:ring-offset-zinc-900 active:scale-[0.97] disabled:pointer-events-none disabled:opacity-50';
 
-        if ($variant === 'flat' || $outline) {
-            if ($color === 'secondary') {
-                $style = 'bg-transparent text-gray-600 hover:bg-gray-100 hover:text-gray-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 focus:ring-gray-200';
-            } else {
-                $style = 'bg-transparent text-primary-600 hover:bg-primary-50 dark:text-primary-500 dark:hover:bg-primary-900/20 focus:ring-primary-500';
-            }
-            if ($outline) $style .= ' border border-current';
+        $size = $sm ? 'px-2.5 py-1.5 text-xs' : 'px-4 py-2 text-sm';
+
+        if ($outline) {
+            $style = 'border border-zinc-300 bg-transparent text-zinc-600 hover:border-zinc-400 hover:bg-zinc-50 focus:ring-zinc-300';
+            $style .= ' dark:border-zinc-600 dark:text-zinc-300 dark:hover:border-zinc-500 dark:hover:bg-zinc-800';
+        } elseif ($color === 'secondary') {
+            $style = 'border border-zinc-200 bg-white text-zinc-700 shadow-sm hover:bg-zinc-50 hover:border-zinc-300 focus:ring-zinc-200';
+            $style .= ' dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 dark:hover:border-zinc-600';
         } else {
-            if ($color === 'secondary') {
-                $style = 'border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700 focus:ring-gray-200 shadow-sm';
-            } else {
-                $style = 'bg-primary-500 text-white shadow-sm hover:bg-primary-600 focus:ring-primary-500 dark:bg-primary-600 dark:hover:bg-primary-500';
-            }
+            $style = 'bg-violet-600 text-white shadow-sm shadow-violet-500/20 hover:bg-violet-500 focus:ring-violet-500';
+            $style .= ' dark:bg-violet-600 dark:hover:bg-violet-500';
         }
     @endphp
 
-    <button type="{{ $type }}" {{ $attributes->merge(['class' => "$base $sizeClass $style"]) }}>
+    <button type="{{ $type }}" {{ $attributes->class([$base, $size, $style]) }}>
         @if ($icon === 'magnifying-glass')
-            <svg class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 15.803a7.5 7.5 0 0010.607 0z"/>
+            <svg class="h-3.5 w-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0a7.5 7.5 0 10-10.607 0 7.5 7.5 0 0010.607 0z"/>
             </svg>
         @endif
         {{ $slot }}

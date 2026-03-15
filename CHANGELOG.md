@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 2026-03-15
+
+### Changed
+
+- **Native mode suspended** — `resolveUiAdapter()` now returns `'tallstackui'` unconditionally; the `'ui'` config key and `TALL_ICON_PICKER_UI` env variable no longer affect runtime behavior. All native adapter files (`ui/button`, `ui/input`, `ui/select`, `ui/drawer`, `icon-picker.blade.php`) are preserved in full and will be re-enabled once the native UI redesign is complete.
+- **`'ui'` key removed from config** — `config/tall-icon-picker.php` no longer publishes the `'ui'` entry; the adapter is always set to `'tallstackui'` by the service provider at boot time.
+- **TallStackUI `^2.0` is now a required runtime dependency** — previously suggested (auto-detected); now it must be present as the package renders exclusively through `x-ts-*` components until native mode is restored. Update `composer.json` to move `tallstackui/tallstackui` from `suggest` to `require` if your project uses the picker.
+- **Tests updated** — `TallIconPickerServiceProviderTest` now asserts that `resolveUiAdapter()` returns `'tallstackui'` for every input value (`'tallstackui'`, `'auto'`, `'native'`).
+
+## [2.0.0] - 2026-03-15
+
+### Changed
+
+- **Native UI completely redesigned** — all native adapter components (`ui/button`, `ui/input`, `ui/select`, `ui/drawer`) and the native Livewire view (`icon-picker.blade.php`) rebuilt from the ground up with a clean, professional blue design system; mobile-first layout; and user-centered interaction patterns
+- **Blue design system** — native mode now uses a cohesive `blue-*` color scale throughout: `border-blue-500 bg-blue-50 ring-2 ring-blue-500` selected state, `hover:scale-110 hover:border-blue-300 hover:bg-blue-50/50` hover effect, `bg-blue-500 text-white` current page indicator and buttons; replaces the generic `primary-*` token chain that had no visual identity in native mode
+- **Icon grid** — tightened to `grid-cols-5 gap-2 sm:grid-cols-6 md:grid-cols-8`; icon tiles display SVG only (name label removed); hover uses `scale-110` scale transform instead of vertical lift; selected badge reduced to `h-4 w-4` positioned at `right-0.5 top-0.5`
+- **Trigger field** — redesigned as a compact `rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm` row; choose button is now `sm` sized and sits inline without wrapping on mobile
+- **Pagination** — `‹` and `›` HTML entity characters replace SVG chevron paths; nav buttons use `h-8 w-8` (down from `h-9 w-9`); hover state transitions to blue (`hover:border-blue-300 hover:bg-blue-50`)
+- **Stats bar** — replaced spinner with inline `animate-pulse` text on the loading state; layout simplified to a borderless two-column flex row
+- **Skeleton grid** — matches icon grid columns (`grid-cols-5 gap-2 sm:grid-cols-6 md:grid-cols-8`); tile count updated to 48
+- **`ui/drawer`** — `$wire.entangle('{{ $property }}')` replaced with the v1.3.0 reactive getter/setter pattern (`get open()` / `set open(val)`) eliminating initialization-order risk; header close button uses `h-5 w-5` instead of `h-6 w-6`; close ring updated to `focus:ring-blue-500`
+- **`ui/select`** — dropdown transition updated to `ease-out duration-150` translate-Y reveal; chevron rotates 180° when open (`rotate-180` via `:class`); selected option uses `bg-blue-50 text-blue-700` (hardcoded blue, not `primary-*`)
+- **`ui/input`** — focus ring updated to `focus:ring-blue-500/20 focus:border-blue-500`; icon size reduced to `h-4 w-4`
+- **`ui/button`** — primary color explicitly `bg-blue-500 hover:bg-blue-600 focus:ring-blue-500`; secondary and flat variants unchanged
+
+## [1.5.0] - 2026-03-15
+
+### Changed
+- **Restored v1.3.0 Alpine/Livewire logic across all native components** — business logic and interaction patterns downgraded to the proven v1.3.0 baseline while keeping the current visual interface intact:
+  - **`ui/drawer`** — backdrop `@click="open = false"` (explicit click-to-close on the overlay, matching v1.3.0) replaces `@click.outside` on the panel; backdrop now fades in/out with dedicated `x-transition:enter/leave` directives instead of the shorthand `x-transition.opacity`
+  - **`ui/select`** — `get selected()` reads `$wire.property` directly (reactive via Livewire's `$wire` Proxy) and writes use `$wire.set()` explicitly, restoring the exact binding pattern from v1.3.0 and eliminating `$wire.$entangle()` which caused initialization-order failures with stale published views; options JSON is stored in a `data-options` attribute rendered via `{{ }}` (htmlspecialchars), keeping `x-data` free of Blade-interpolated JSON content and safe in any HTML attribute quote style
+  - **`ui/select`** — `get selected()` simplified to `return $wire.{{ $wireProperty }} || []` (v1.3.0 direct reactive getter, always array — no `$multiple` JS conditional); `toggle()` always treats as array; `isSelected()` simplified to `includes()`; `remove()` method added; container gains `@click.away` + `@keydown.escape` replacing `@click.outside` on the trigger button
+  - **`icon-picker.blade.php`** — `wire:click.stop="clearIcon"` corrected to `wire:click="clearIcon"` (v1.3.0 — no propagation stop needed); stats bar now shows the active search term after a `·` separator; pagination adds a mobile-compact `$page/$lastPage` indicator with numbered buttons hidden below the `sm` breakpoint
+  - **`src/Livewire/IconPicker.php`** — `resetFilters()` retained (present in v1.3.0 and current)
+  - **`ui/button`**, **`ui/input`** — no logic changes; wire:* attribute passthrough already matched v1.3.0
+
 ## [1.4.3] - 2026-03-15
 
 ### Fixed
@@ -137,7 +173,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - TallStackUI support (`x-ts-slide`, `x-ts-button`)
 - GitHub Actions: CI, code style, automatic CHANGELOG
 
-[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.3...HEAD
+[Unreleased]: https://github.com/matheusmarnt/tall-icon-picker/compare/v2.1.0...HEAD
+[2.1.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v2.0.0...v2.1.0
+[2.0.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.5.0...v2.0.0
+[1.5.0]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.3...v1.5.0
 [1.4.3]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.2...v1.4.3
 [1.4.2]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.1...v1.4.2
 [1.4.1]: https://github.com/matheusmarnt/tall-icon-picker/compare/v1.4.0...v1.4.1

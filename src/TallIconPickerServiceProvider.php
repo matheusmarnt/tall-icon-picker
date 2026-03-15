@@ -53,14 +53,8 @@ class TallIconPickerServiceProvider extends ServiceProvider
 
     private function resolveUiAdapter(): string
     {
-        $configured = Config::get('tall-icon-picker.ui', 'auto');
-
-        if ($configured !== 'auto') {
-            return $configured;
-        }
-
-        return class_exists(\TallStackUI\TallStackUIServiceProvider::class)
-            ? 'tallstackui'
-            : 'native';
+        // Native mode is temporarily suspended while its UI is being redesigned.
+        // All native adapter files are preserved and will be re-enabled in a future release.
+        return 'tallstackui';
     }
 }
