@@ -18,7 +18,7 @@ class IconDiscoveryService
     }
 
     /**
-     * Retorna as bibliotecas configuradas e o total de ícones de cada uma.
+     * Returns the configured libraries and the total number of icons in each.
      *
      * @return array<int, array{id: string, name: string}>
      */
@@ -42,7 +42,7 @@ class IconDiscoveryService
     }
 
     /**
-     * Descobre e pagina ícones filtrando por bibliotecas selecionadas e busca.
+     * Discover and browse icons by filtering through selected libraries and search.
      *
      * @param  array<string>  $selectedLibraries
      * @return LengthAwarePaginator<int, string>

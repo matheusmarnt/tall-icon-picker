@@ -26,39 +26,9 @@ beforeEach(function () {
     }
     File::put($heroPath.'/check.svg', '<svg></svg>');
 
-    // Update config to point to our test directory
-    // We need to mock base_path to point to our test directory logic or adjust the service to accept a base path.
-    // However, the service uses base_path('vendor/...').
-    // We can't easily mock base_path() function globally without runkit.
-    //
-    // Strategy: We will mock the Config to point to a relative path that resolves to our temp dir relative to base_path.
-    // Or, we can modify the Service to use a configurable base path, but that changes the production code.
-    //
-    // Best approach for package testing:
-    // The service does: base_path("vendor/{$lib['package']}/{$lib['path']}")
-    // If we set the base_path in Orchestra, we can control it.
-    // Orchestra's base_path usually points to the testbench core.
-
-    // Let's rely on standard Laravel mocking if possible, but base_path is a helper.
-    // Let's create the directory inside the actual `vendor` of the test runner if possible, or use a relative path trick.
-    //
-    // Actually, we can just use `Config::set` and set the 'package' to start with `../` if needed,
-    // but `base_path` prepends the project root.
-    //
-    // Let's try to mock the `base_path` behavior by creating the folder in the actual project root of the test runner.
-    // `orchestra/testbench` runs in a folder. `base_path()` returns that folder.
-
     $this->basePath = base_path();
     $this->vendorPath = $this->basePath.'/vendor';
 
-    // We will create the structure inside the real vendor directory of the test runner
-    // (which is safe as it's a temporary testbench environment usually).
-    // BUT we are running in the package root. `base_path()` in testbench points to `workbench` or similar.
-
-    // Let's use a subdirectory in the test folder and assume we can reach it.
-    // Wait, the service code is: `base_path("vendor/{$lib['package']}/{$lib['path']}")`
-    // We can fool it by setting 'package' to `../../tests/temp_vendor/package`.
-    // Let's try that.
 });
 
 afterEach(function () {

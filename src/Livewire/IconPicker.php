@@ -128,6 +128,14 @@ class IconPicker extends Component
         unset($this->icons);
     }
 
+    public function resetFilters(): void
+    {
+        $this->search = '';
+        $this->libraries = ['lucide'];
+        $this->page = 1;
+        unset($this->icons);
+    }
+
     public function render(): View
     {
         $ui = Config::get('tall-icon-picker.ui', 'native');
